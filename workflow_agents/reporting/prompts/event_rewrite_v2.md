@@ -31,6 +31,10 @@ process_comparison_anchor给出推荐比较事实和对应区间。若用一组�
 来水比例能帮助解释来源差异时再使用。source_composition.summary已包含来源名称，不紧邻标记再抄同一份名单。“全部来自本地”与100%份额选一种即可。关键流量已经在过程段比较，成因段解释其含义，不再抄相同标记。调蓄或设施实际参与过程时说明它缓冲了什么、为何未能充分缓冲；不适用项不展开。
 
 【下游影响candidate_influences】
+先核对当前事件的event_output_contract，只有candidate_mechanism_ids非空时才写候选影响。源状态为needs_evidence表示诊断尚需补证，不属于candidate；也不能从not_investigated或not_applicable推导候选影响。列表为空时，candidate_mechanism_ids和candidate_influences均输出[]，不写占位解释。任一章节都遵守同一状态边界。
+
+例如，源诊断支持M1、M2、M4，而M3、M6为needs_evidence、M5为not_applicable时，只复制supported_mechanism_ids:["M1","M2","M4"]；candidate_mechanism_ids:[]、candidate_influences:[]。即使教学示例写了下游顶托，也不把它套到当前事件。不改动源状态，不为填满段落而重新诊断。
+
 通常一句说明哪个下游节点水位较高，可能影响哪条管段，使当前节点排水怎样变化。可能影响自然使用“可能”，不变成确定主因。句子结束在具体作用，不追加“尚未证实”“不能据此确定主因”“只能作为候选影响”“这种可能同时存在”等内部判断说明或空泛收尾。未确定强度不写顶托较弱、影响有限。
 
 downstream_event_context提供本次时间关系。下游此前冒溢已结束时，描述仍然较高的水位，不写同期冒溢；结束与当前开始为同刻时不说严格早于。同一开始时刻的节点说同时，不能写紧随。无相关事件不能编造其冒溢。
