@@ -1,0 +1,10 @@
+{
+  "version": "scene_v1",
+  "display_aliases": {
+    "UrbanDrainage scenario family": "UrbanDrainage区域"
+  },
+  "opening": "本次模拟针对{model}的{scenario}，采用历时{duration}、累计雨量{total}毫米的{shape}。",
+  "dry_opening": "本次模拟针对{model}的{scenario}，采用无降雨情景。",
+  "report_outline": "报告依次呈现降雨过程、地表积水分布与演变、管网冒溢及其地表联系，并结合节点来水与相邻管段的流量变化解释主要现象。",
+  "report_outline_without_event_analysis": "报告依次呈现降雨过程、地表积水分布与演变及管网运行表现，说明本次模拟的主要现象。"
+}

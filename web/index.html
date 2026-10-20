@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SWMM-Agentic3 Workflow Chat</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eef2f5;
+      --bg-panel: #f8fafb;
+      --panel: #ffffff;
+      --panel-2: #fbfcfd;
+      --ink: #1e2933;
+      --muted: #657586;
+      --soft: #8795a5;
+      --line: #d7dee7;
+      --line-strong: #c7d0dc;
+      --accent: #0d7c74;
+      --accent-strong: #075e59;
+      --accent-soft: #e4f4f1;
+      --amber: #b7791f;
+      --amber-soft: #fff4dd;
+      --assistant: #ffffff;
+      --user: #e4f4f1;
+      --shadow: 0 18px 48px rgba(30, 41, 51, 0.12);
+      --shadow-soft: 0 8px 24px rgba(30, 41, 51, 0.08);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(13, 124, 116, 0.09), transparent 34%),
+        linear-gradient(315deg, rgba(183, 121, 31, 0.10), transparent 36%),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    aside {
+      border-right: 1px solid var(--line);
+      background: rgba(248, 250, 251, 0.92);
+      padding: 24px 20px;
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid rgba(13, 124, 116, 0.25);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, #0d7c74, #2f9f91);
+      color: white;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: var(--shadow-soft);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 21px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .kicker {
+      margin: 0;
+      color: var(--soft);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .side-section {
+      margin-top: 22px;
+    }
+
+    .side-title {
+      margin: 0 0 10px;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .example {
+      width: 100%;
+      margin: 0 0 9px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--ink);
+      text-align: left;
+      font: inherit;
+      font-size: 13px;
+      line-height: 1.45;
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgba(30, 41, 51, 0.03);
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+    }
+
+    .example:hover {
+      border-color: rgba(13, 124, 116, 0.55);
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-1px);
+    }
+
+    .aside-note {
+      margin: 18px 0 0;
+      border: 1px solid #ead5ad;
+      border-radius: var(--radius);
+      background: var(--amber-soft);
+      padding: 11px 12px;
+      color: #6f4f17;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      padding: 18px 26px;
+      backdrop-filter: blur(14px);
+    }
+
+    .header-copy {
+      min-width: 0;
+    }
+
+    .designer {
+      margin: 2px 0 0;
+      color: var(--accent-strong);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .header-copy .subtitle {
+      margin: 4px 0 0;
+      max-width: 720px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      border: 1px solid rgba(13, 124, 116, 0.18);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      padding: 0 12px;
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(13, 124, 116, 0.12);
+    }
+
+    .messages {
+      overflow-y: auto;
+      padding: 28px 26px 30px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 980px);
+      gap: 14px;
+      margin: 0 0 20px;
+      align-items: start;
+    }
+
+    .role {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(30, 41, 51, 0.04);
+    }
+
+    .message.user {
+      grid-template-columns: minmax(0, 980px) 56px;
+      justify-content: end;
+    }
+
+    .message.user .role {
+      grid-column: 2;
+      grid-row: 1;
+      border-color: rgba(13, 124, 116, 0.25);
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+
+    .bubble {
+      min-width: 0;
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px 16px;
+      background: var(--assistant);
+      box-shadow: 0 4px 14px rgba(30, 41, 51, 0.05);
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.66;
+      font-size: 14px;
+    }
+
+    .message.user .bubble {
+      background: var(--user);
+      border-color: rgba(13, 124, 116, 0.24);
+    }
+
+    .bubble p {
+      margin: 0 0 10px;
+    }
+
+    .bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .bubble h1,
+    .bubble h2,
+    .bubble h3,
+    .bubble h4 {
+      margin: 2px 0 10px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .bubble h1 { font-size: 20px; }
+    .bubble h2 { font-size: 18px; }
+    .bubble h3 { font-size: 16px; }
+    .bubble h4 { font-size: 15px; }
+
+    .bubble ul,
+    .bubble ol {
+      margin: 6px 0 12px 22px;
+      padding: 0;
+    }
+
+    .bubble li {
+      margin: 4px 0;
+    }
+
+    .bubble code {
+      border: 1px solid #d7dde7;
+      border-radius: 5px;
+      background: #f3f5f8;
+      padding: 1px 5px;
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    .bubble pre {
+      overflow: auto;
+      margin: 8px 0 12px;
+      border: 1px solid #d7dde7;
+      border-radius: var(--radius);
+      background: #f7f9fb;
+      padding: 12px;
+    }
+
+    .bubble pre code {
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+
+    .chat-details {
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .chat-details > summary {
+      cursor: pointer;
+      color: var(--accent-strong);
+      padding: 4px 0;
+    }
+
+    .chat-details[open] {
+      color: var(--ink);
+    }
+
+    .bubble a {
+      color: var(--accent-strong);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .composer {
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      padding: 16px 26px 22px;
+      box-shadow: 0 -10px 28px rgba(30, 41, 51, 0.06);
+      backdrop-filter: blur(14px);
+    }
+
+    textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 86px;
+      max-height: 220px;
+      resize: vertical;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--panel-2);
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(30, 41, 51, 0.04);
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button.primary,
+    button.secondary {
+      min-height: 38px;
+      border-radius: var(--radius);
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+    }
+
+    button.primary {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 8px 18px rgba(13, 124, 116, 0.20);
+    }
+
+    button.primary:hover:not(:disabled) {
+      border-color: var(--accent-strong);
+      background: var(--accent-strong);
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+    }
+
+    button.secondary:hover:not(:disabled) {
+      border-color: var(--line-strong);
+      background: #f8fafb;
+    }
+
+    button:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    ::selection {
+      background: rgba(13, 124, 116, 0.18);
+    }
+
+    @media (max-width: 860px) {
+      .app { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .app,
+      .main {
+        max-width: 100vw;
+      }
+      header,
+      .messages,
+      .composer { padding-left: 16px; padding-right: 16px; }
+      .messages,
+      .composer {
+        width: 100%;
+        max-width: 100vw;
+      }
+      .message,
+      .message.user {
+        grid-template-columns: 42px minmax(0, 1fr);
+        gap: 10px;
+        width: 100%;
+        max-width: calc(100vw - 32px);
+        justify-content: start;
+      }
+      .message.user .role {
+        grid-column: 1;
+      }
+      .bubble {
+        max-width: calc(100vw - 84px);
+        word-break: break-word;
+      }
+      textarea {
+        max-width: calc(100vw - 32px);
+      }
+      header { align-items: flex-start; flex-direction: column; }
+      .status { white-space: normal; }
+      .actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark">S2</div>
+        <div>
+          <p class="kicker">Workflow Console</p>
+          <h1>SWMM-Agentic3</h1>
+        </div>
+      </div>
+      <p class="subtitle">SWMM-2D &#27169;&#22411;&#26816;&#26597;&#12289;&#27169;&#25311;&#25512;&#36827;&#19982;&#35786;&#26029;&#35777;&#25454;&#25972;&#29702;&#24037;&#20316;&#21488;&#12290;</p>
+      <div class="side-section">
+        <p class="side-title">&#24555;&#36895;&#24320;&#22987;</p>
+        <button class="example">&#35831;&#21015;&#20986; models &#19979;&#30340;&#27169;&#22411;&#39033;&#30446;&#65292;&#24182;&#26816;&#26597;&#23427;&#20204;&#26159;&#21542;&#23436;&#25972;&#65292;</button>
+        <button class="example">&#24110;&#25105;&#35774;&#35745;&#19968;&#27425; SWMM-2D &#20869;&#28061;&#35786;&#26029;&#27969;&#31243;&#65292;&#24182;&#19968;&#27493;&#19968;&#27493;&#25191;&#34892;&#12290;</button>
+        <button class="example">&#22909;&#30340;&#65292;&#19979;&#19968;&#27493;&#25105;&#35813;&#20570;&#20160;&#20040;&#65311;</button>
+        <button class="example">&#32487;&#32493;</button>
+      </div>
+      <p class="aside-note">&#24403;&#21069;&#32858;&#28966;&#65306;&#27169;&#22411;&#23436;&#25972;&#24615;&#12289;&#38632;&#22411;&#20107;&#20214;&#12289;&#36816;&#34892;&#35760;&#24405;&#12289;&#35786;&#26029;&#32467;&#35770;&#19982;&#35777;&#25454;&#32593;&#32476;&#12290;</p>
+    </aside>
+
+    <section class="main">
+      <header>
+        <div class="header-copy">
+          <h1>&#23545;&#35805;&#24037;&#20316;&#21488;</h1>
+          <p class="designer">&#35774;&#35745;&#20154;&#65306;OYY</p>
+          <p class="subtitle">&#27169;&#25311;&#32534;&#25490;&#12289;&#38454;&#27573;&#26680;&#26597;&#21644;&#25253;&#21578;&#29983;&#25104;&#30340;&#32479;&#19968;&#23545;&#35805;&#30028;&#38754;&#12290;</p>
+        </div>
+        <div id="status" class="status">&#23601;&#32490;</div>
+      </header>
+
+      <main id="messages" class="messages">
+        <div class="message assistant">
+          <div class="role">Agent</div>
+          <div class="bubble">&#24744;&#22909;&#65292;&#25105;&#24050;&#32463;&#20934;&#22791;&#22909;&#12290;&#35831;&#36755;&#20837;&#20219;&#21153;&#65292;&#25105;&#20250;&#20808;&#32473;&#20986;&#20998;&#27493;&#35745;&#21010;&#65292;&#24182;&#22312;&#27599;&#19968;&#27493;&#21069;&#21518;&#31561;&#24453;&#24744;&#30830;&#35748;&#12290;</div>
+        </div>
+      </main>
+
+      <form id="composer" class="composer">
+        <textarea id="input" placeholder="&#20363;&#22914;&#65306;&#35831;&#21015;&#20986; models &#19979;&#30340;&#27169;&#22411;&#39033;&#30446;&#65292;&#24182;&#26816;&#26597;&#23427;&#20204;&#26159;&#21542;&#23436;&#25972;&#12290;"></textarea>
+        <div class="actions">
+          <div class="hint">&#20219;&#21153;&#36755;&#20837;</div>
+          <div class="buttons">
+            <button type="button" class="secondary" id="reset">&#26032;&#20250;&#35805;</button>
+            <button type="submit" class="primary" id="send">&#21457;&#36865;</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    const messages = document.getElementById("messages");
+    const form = document.getElementById("composer");
+    const input = document.getElementById("input");
+    const send = document.getElementById("send");
+    const reset = document.getElementById("reset");
+    const statusEl = document.getElementById("status");
+    let sessionId = localStorage.getItem("swmm_agentic_session_id") || "";
+    let flowVersion = null;
+    const CHAT_TIMEOUT_MS = 15 * 60 * 1000;
+
+    function showWorkflow(workflow = {}) {
+      flowVersion = workflow.version ?? null;
+      const labels = {
+        scenario: "准备情景", simulation: "执行模拟", evidence_building: "构建证据",
+        prepare_diagnosis: "准备诊断任务", diagnose: "执行诊断", verify: "核查引用",
+        report: "生成报告", evidence: "补证", display_report: "重试 HTML 报告"
+      };
+      const next = labels[workflow.next_action];
+      statusEl.textContent = next ? "等待确认 | 下一步：" + next :
+        workflow.status === "completed" ? "当前流程已完成" :
+        workflow.status === "context_blocked" ? "输入证据超限，请缩小调查范围" : "就绪";
+    }
+
+    function addMessage(role, text) {
+      const wrap = document.createElement("div");
+      wrap.className = "message " + (role === "user" ? "user" : "assistant");
+
+      const roleEl = document.createElement("div");
+      roleEl.className = "role";
+      roleEl.textContent = role === "user" ? "\u60a8" : "Agent";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = role === "assistant" ? renderChatReply(text) : escapeHtml(text);
+
+      wrap.appendChild(roleEl);
+      wrap.appendChild(bubble);
+      messages.appendChild(wrap);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderInlineMarkdown(value) {
+      return escapeHtml(value)
+        .replace(/\[([^\]]+)\]\((\/models\/[^)\s"<>]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    }
+
+    function renderChatReply(value) {
+      const text = String(value);
+      if (!text.includes(":::details ") && text.length > 1800) {
+        const firstLine = text.split("\n").find((line) => line.trim()) || "";
+        const preview = firstLine.length > 240 ? firstLine.slice(0, 240) + "…" : firstLine;
+        return renderMarkdown(preview) + '<details class="chat-details"><summary>这条历史回复较长，展开查看完整内容</summary>' + renderMarkdown(text) + '</details>';
+      }
+      return renderMarkdown(text);
+    }
+
+    function renderMarkdown(value) {
+      const normalized = normalizeReportText(value);
+      const lines = normalized.replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      let inCode = false;
+      let codeLines = [];
+      let listType = null;
+      let detailLines = null;
+      let detailTitle = "";
+
+      function closeList() {
+        if (listType) {
+          html.push("</" + listType + ">");
+          listType = null;
+        }
+      }
+
+      function closeCode() {
+        if (inCode) {
+          html.push("<pre><code>" + escapeHtml(codeLines.join("\n")) + "</code></pre>");
+          codeLines = [];
+          inCode = false;
+        }
+      }
+
+      for (const line of lines) {
+        if (detailLines !== null) {
+          if (line.trim() === ":::") {
+            html.push('<details class="chat-details"><summary>' + escapeHtml(detailTitle) + '</summary>' + renderMarkdown(detailLines.join("\n")) + '</details>');
+            detailLines = null;
+          } else {
+            detailLines.push(line);
+          }
+          continue;
+        }
+        if (!inCode && line.startsWith(":::details ")) {
+          closeList();
+          detailTitle = line.slice(":::details ".length);
+          detailLines = [];
+          continue;
+        }
+        if (line.trim().startsWith("```")) {
+          if (inCode) {
+            closeCode();
+          } else {
+            closeList();
+            inCode = true;
+            codeLines = [];
+          }
+          continue;
+        }
+
+        if (inCode) {
+          codeLines.push(line);
+          continue;
+        }
+
+        const trimmed = line.trim();
+        if (!trimmed) {
+          closeList();
+          html.push("");
+          continue;
+        }
+
+        const heading = trimmed.match(/^(#{1,4})\s*(.+)$/);
+        if (heading) {
+          closeList();
+          const level = heading[1].length;
+          html.push("<h" + level + ">" + renderInlineMarkdown(heading[2]) + "</h" + level + ">");
+          continue;
+        }
+
+        const unordered = trimmed.match(/^[-*]\s*(.+)$/);
+        if (unordered) {
+          if (listType !== "ul") {
+            closeList();
+            listType = "ul";
+            html.push("<ul>");
+          }
+          html.push("<li>" + renderInlineMarkdown(unordered[1]) + "</li>");
+          continue;
+        }
+
+        const ordered = trimmed.match(/^\d+[.)]\s*(.+)$/);
+        if (ordered) {
+          if (listType !== "ol") {
+            closeList();
+            listType = "ol";
+            html.push("<ol>");
+          }
+          html.push("<li>" + renderInlineMarkdown(ordered[1]) + "</li>");
+          continue;
+        }
+
+        closeList();
+        html.push("<p>" + renderInlineMarkdown(line) + "</p>");
+      }
+
+      closeCode();
+      closeList();
+      if (detailLines !== null) {
+        html.push('<details class="chat-details"><summary>' + escapeHtml(detailTitle) + '</summary>' + renderMarkdown(detailLines.join("\n")) + '</details>');
+      }
+      return html.join("\n");
+    }
+
+    function normalizeReportText(value) {
+      return String(value)
+        .replace(/\r\n/g, "\n")
+        .replace(/^(#{1,4})(\S)/gm, "$1 $2")
+        .replace(/^(\d+[.)])(\S)/gm, "$1 $2")
+        .replace(/^[-*](\S)/gm, "- $1")
+        .replace(/\\_/g, "_")
+        .trim();
+    }
+
+    async function submitMessage(text) {
+      if (!text.trim() || send.disabled) return;
+      addMessage("user", text);
+      input.value = "";
+      input.style.height = "";
+      send.disabled = true;
+      reset.disabled = true;
+      const startedAt = Date.now();
+      const statusTimer = window.setInterval(() => {
+        const seconds = Math.floor((Date.now() - startedAt) / 1000);
+        statusEl.textContent = "Agent running... " + seconds + "s";
+      }, 1000);
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), CHAT_TIMEOUT_MS);
+      statusEl.textContent = "Agent \u601d\u8003\u4e2d...";
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: sessionId, message: text, flow_version: flowVersion }),
+          signal: controller.signal
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "\u8bf7\u6c42\u5931\u8d25");
+        }
+        sessionId = data.session_id;
+        localStorage.setItem("swmm_agentic_session_id", sessionId);
+        addMessage("assistant", data.reply || "(\u65e0\u56de\u590d)");
+        showWorkflow(data.workflow);
+      } catch (err) {
+        const message = err.name === "AbortError"
+          ? "Request timed out after 15 minutes. Input has been restored. If a long simulation was started, check the latest models/<model_name>/runs/ output folder."
+          : "Request failed: " + err.message;
+        addMessage("assistant", message);
+        statusEl.textContent = "Error";
+        input.value = text;
+        // A server error may still have saved a failed/interrupted step.
+        if (sessionId) {
+          const stateResponse = await fetch("/api/session/" + encodeURIComponent(sessionId)).catch(() => null);
+          if (stateResponse?.ok) showWorkflow((await stateResponse.json()).workflow);
+        }
+      } finally {
+        window.clearInterval(statusTimer);
+        window.clearTimeout(timeoutId);
+        send.disabled = false;
+        reset.disabled = false;
+        input.focus();
+      }
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitMessage(input.value);
+    });
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+
+    reset.addEventListener("click", async () => {
+      if (sessionId) {
+        await fetch("/api/session/" + encodeURIComponent(sessionId), { method: "DELETE" });
+      }
+      sessionId = "";
+      flowVersion = null;
+      localStorage.removeItem("swmm_agentic_session_id");
+      messages.innerHTML = "";
+      addMessage("assistant", "\u65b0\u4f1a\u8bdd\u5df2\u5f00\u59cb\u3002\u8bf7\u8f93\u5165\u4efb\u52a1\uff0c\u6211\u4f1a\u5148\u7ed9\u51fa\u5206\u6b65\u8ba1\u5212\uff0c\u5e76\u7b49\u5f85\u60a8\u786e\u8ba4\u3002");
+      statusEl.textContent = "\u5c31\u7eea";
+      input.focus();
+    });
+
+    document.querySelectorAll(".example").forEach((button) => {
+      button.addEventListener("click", () => {
+        input.value = button.textContent;
+        input.focus();
+      });
+    });
+
+    async function restoreSession() {
+      if (!sessionId) return;
+      send.disabled = true;
+      reset.disabled = true;
+      try {
+        const response = await fetch("/api/session/" + encodeURIComponent(sessionId));
+        if (response.status === 404) {
+          sessionId = "";
+          localStorage.removeItem("swmm_agentic_session_id");
+          return;
+        }
+        if (!response.ok) throw new Error("会话读取失败");
+        const data = await response.json();
+        messages.innerHTML = "";
+        data.transcript.forEach((item) => addMessage(item.role, item.content));
+        showWorkflow(data.workflow);
+      } catch (err) {
+        statusEl.textContent = "会话恢复失败，请刷新重试";
+      } finally {
+        send.disabled = false;
+        reset.disabled = false;
+      }
+    }
+
+    restoreSession();
+    input.focus();
+  </script>
+</body>
+</html>

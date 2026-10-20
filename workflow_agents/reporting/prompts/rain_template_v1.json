@@ -1,0 +1,9 @@
+{
+  "version": "rain_v1",
+  "peak_opening": "本场降雨呈明显{shape}形态，{peak_label}出现在{peak_time}，最大{interval}分钟平均雨强约为{intensity}毫米/小时。",
+  "uniform_opening": "本场降雨的雨强整体较为均匀，{interval}分钟平均雨强约为{intensity}毫米/小时。",
+  "other_opening": "本场降雨的雨强随时间变化，最大{interval}分钟平均雨强出现在{peak_time}，约为{intensity}毫米/小时。",
+  "window": "雨量最多的连续{window}分钟为{start}—{end}，累计雨量约{amount}毫米，占整场降雨的{share}%。",
+  "concentrated": "本场降雨的突出特点，是较多雨量集中在较短时间内。",
+  "dry": "本次模拟期间没有降雨。"
+}

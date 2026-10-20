@@ -1,0 +1,12 @@
+autogen-agentchat==0.6.1
+autogen-core==0.6.1
+autogen-ext[openai]==0.6.1
+pyswmm==2.1.0
+numpy==2.4.6
+pandas==3.0.5
+matplotlib==3.11.1
+Pillow==11.2.1
+typing_extensions==4.14.0
+fastapi==0.124.4
+pydantic==2.11.10
+uvicorn[standard]==0.40.0
