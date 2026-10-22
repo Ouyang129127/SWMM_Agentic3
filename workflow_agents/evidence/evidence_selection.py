@@ -143,7 +143,7 @@ def select_initial_evidence(rows, scope, model_name, run_id):
         'related_nodes': sorted(related_nodes), 'related_links': sorted(related_links),
         'background_scope': 'Whole-run statistics remain background; do not substitute them for event values.',
         'limitations': ['Local packages cover only their saved process window; missing values remain unknown.',
-                        'Topology corridors stop at recorded boundaries; they do not guarantee all causes are covered.',
+                        'Initial scope uses one upstream segment and downstream to a retained boundary, without side-branch expansion; it does not guarantee all causes are covered.',
                         'Global statistics are not individual-object or causal diagnosis.'],
     }
     if not events:

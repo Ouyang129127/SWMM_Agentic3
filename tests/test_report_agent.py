@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-from workflow_agents.reporting.materials import SECTIONS, assert_sources_current, rainfall_metrics, saved_time_metrics
+from workflow_agents.reporting.materials import SECTIONS, assert_sources_current, rainfall_metrics, saved_time_metrics, select_event_process
 from workflow_agents.reporting.narrative import assemble_fixed_sections, expand, make_prompt, validate, write_narrative
 from workflow_agents.reporting.pipeline import attach_display_report, check_html, generate_display_report
 from workflow_agents.reporting.plots import make_plots
@@ -70,6 +70,40 @@ class ReportTests(unittest.IsolatedAsyncioTestCase):
     def tearDown(self):self.tmp.cleanup()
 
     def valid(self,response):return validate(response,self.materials,self.facts,['Junction_A','Outlet_B'])
+
+    def process_row(self, links=('1', '6'), times=None, eid='10:E001', node='10'):
+        times = times or ('2024-01-01 00:05:00', '2024-01-01 00:07:00', '2024-01-01 00:10:00')
+        return {'event_id': eid, 'metric_name': 'local_process_series', 'value': {'series': [
+            {'time': time, 'nodes': {node: {}}, 'links': {link: {} for link in links}}
+            for time in times]}}
+
+    def process_event(self):
+        return {'event_id': '10:E001', 'node_id': '10', 'start': '2024-01-01 00:05:00',
+                'peak_time': '2024-01-01 00:07:00', 'end': '2024-01-01 00:10:00'}
+
+    def test_narrow_supplements_do_not_replace_complete_event_process(self):
+        base = self.process_row()
+        rows = [base, self.process_row(('5', '6', '7')), self.process_row(('6',))]
+        original = copy.deepcopy(rows)
+        process = select_event_process(rows, self.process_event(), {'1': {}, '6': {}})
+        self.assertIs(process, base['value']['series'])
+        self.assertEqual(rows, original)
+
+    def test_process_selection_checks_every_sample_target_event_window_and_peak(self):
+        incomplete = self.process_row()
+        incomplete['value']['series'][1]['links'].pop('1')
+        cases = [incomplete, self.process_row(node='21'), self.process_row(eid='10:E002'),
+                 self.process_row(times=('2024-01-01 00:07:00', '2024-01-01 00:10:00')),
+                 self.process_row(times=('2024-01-01 00:05:00', '2024-01-01 00:10:00'))]
+        for row in cases:
+            with self.subTest(row=row), self.assertRaisesRegex(ValueError, 'Missing complete.*10:E001'):
+                select_event_process([row], self.process_event(), {'1': {}, '6': {}})
+
+    def test_complete_supplement_can_supply_missing_event_process(self):
+        supplement = self.process_row()
+        rows = [self.process_row(('6',)), supplement]
+        self.assertIs(select_event_process(rows, self.process_event(), {'1': {}, '6': {}}),
+                      supplement['value']['series'])
 
     def test_all_events_including_repeated_node_are_required(self):
         r=answer(self.prompt);self.valid(r);r['events'].pop()

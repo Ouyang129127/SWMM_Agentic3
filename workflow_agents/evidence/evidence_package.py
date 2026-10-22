@@ -4,9 +4,10 @@ from pathlib import Path
 
 from workflow_agents.verification.reference_checks import check_references
 from workflow_agents.common.hashing import sha256_file
+from workflow_agents.evidence.topology_scope import SCOPE_POLICY
 
 PACKAGE_SCHEMA = 'swmm_ca2d_evidence_package'
-PACKAGE_VERSION = '1.1'
+PACKAGE_VERSION = '1.2'
 
 
 def validate_package(package, model_name, run_id):
@@ -16,6 +17,8 @@ def validate_package(package, model_name, run_id):
         raise ValueError('Evidence package belongs to another model/run')
     if not isinstance(package.get('evidence_rows'), list) or not isinstance(package.get('overview'), dict):
         raise ValueError('Evidence package requires evidence_rows and overview')
+    if package['overview'].get('event_scope_policy') != SCOPE_POLICY:
+        raise ValueError('首轮拓扑范围已更新；请用已有模拟重建统一证据包并创建新诊断任务，无须重新模拟。')
     check_references({'model_name': model_name, 'run_id': run_id, 'claims': []}, package['evidence_rows'], model_name, run_id)
     return package
 

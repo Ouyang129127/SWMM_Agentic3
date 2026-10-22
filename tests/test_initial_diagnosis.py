@@ -82,6 +82,23 @@ class InitialTests(unittest.IsolatedAsyncioTestCase):
         self.patcher.stop()
         self.temp.cleanup()
 
+    async def test_old_topology_task_cannot_resume_or_make_a_model_call(self):
+        from workflow_agents.orchestration.investigation_flow import load_active_task
+        prepared = await advance_investigation('m', 'r')
+        path = self.root / 'diagnosis_tasks' / prepared['task_id'] / 'task.json'
+        state = json.loads(path.read_text(encoding='utf-8'))
+        state['evidence_package_version'] = '1.1'
+        path.write_text(json.dumps(state), encoding='utf-8')
+        original = path.read_bytes()
+        complete = AsyncMock(side_effect=AssertionError('old scope must never reach the provider'))
+        with self.assertRaisesRegex(ValueError, '拓扑范围'):
+            await advance_investigation('m', 'r', 'diagnose', prepared['task_id'], complete=complete)
+        with self.assertRaisesRegex(ValueError, '拓扑范围'):
+            load_active_task('m', 'r', prepared['task_id'])
+        self.assertIsNone(load_active_task('m', 'r'))
+        complete.assert_not_awaited()
+        self.assertEqual(path.read_bytes(), original)
+
     async def test_default_task_and_all_events_delivered_before_evidence(self):
         before = (self.root / 'evidence/evidence_package.json').read_bytes()
         complete = AsyncMock(side_effect=lambda p: answer(p, [{'tool': 'unavailable', 'object_id': 'N1', 'reason': '需要更长水头时序以区分机制'}]))

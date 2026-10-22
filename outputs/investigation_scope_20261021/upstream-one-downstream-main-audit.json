@@ -1,0 +1,66 @@
+{
+  "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261020_223309_3641fc9e",
+  "target": "10",
+  "upstream_policy": "one incoming pipe per direct upstream path; retain both endpoints",
+  "downstream_policy": "main path to next divergence or outfall; retain endpoints; no entering tributary expansion",
+  "upstream_nodes": [
+    "9"
+  ],
+  "upstream_links": [
+    "1"
+  ],
+  "downstream_paths": [
+    [
+      "10",
+      "21",
+      "22",
+      "16",
+      "24",
+      "17",
+      "18"
+    ]
+  ],
+  "nodes": [
+    "9",
+    "10",
+    "16",
+    "17",
+    "18",
+    "21",
+    "22",
+    "24"
+  ],
+  "links": [
+    "1",
+    "6",
+    "7",
+    "8",
+    "10",
+    "15",
+    "16"
+  ],
+  "excluded_nodes": [
+    "13",
+    "14",
+    "15",
+    "19",
+    "20",
+    "23"
+  ],
+  "excluded_links": [
+    "4",
+    "5",
+    "11",
+    "12",
+    "13",
+    "14"
+  ],
+  "all_selected_node_series_retained": true,
+  "samples": 207,
+  "original_process_row_characters": 668122,
+  "subset_process_row_characters": 394894,
+  "process_character_reduction_percent": 40.89,
+  "runtime_modified": false,
+  "model_called": false,
+  "note": "Preview only. Pipe orientation is from INP, not a finding of actual hydraulic influence. All parcel polygons are background."
+}

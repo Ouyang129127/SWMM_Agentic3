@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 from workflow_agents.evidence.evidence_builder import build_evidence_for_run
-from workflow_agents.evidence.evidence_package import load_package
+from workflow_agents.evidence.evidence_package import PACKAGE_VERSION, load_package
 from workflow_agents.evidence.evidence_precision import PRECISION_POLICY
 from workflow_agents.evidence.evidence_selection import EVENT_GROUPS
 from workflow_agents.orchestration.investigation import advance_investigation
@@ -85,6 +85,25 @@ class UnifiedTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((self.root / 'evidence/evidence_package.json').read_bytes(), before)
         with self.assertRaisesRegex(ValueError, 'source changed'):
             load_package(self.root, verify_sources=True)
+
+    def test_old_topology_cannot_be_relabelled_as_a_current_package(self):
+        self.build()
+        path = self.root / 'evidence/evidence_package.json'
+        package = json.loads(path.read_text(encoding='utf-8'))
+        package['overview']['event_scope_policy'] = 'confluence_divergence_corridors_v1'
+        path.write_text(json.dumps(package), encoding='utf-8')
+        before = path.read_bytes()
+        with self.assertRaisesRegex(ValueError, '拓扑范围已更新'):
+            load_package(self.root)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_previous_1_1_package_is_not_ready_under_the_new_scope(self):
+        self.build()
+        path = self.root / 'evidence/evidence_package.json'
+        package = json.loads(path.read_text(encoding='utf-8'))
+        package['schema_version'] = '1.1'
+        path.write_text(json.dumps(package), encoding='utf-8')
+        self.assertEqual(infer_state_from_artifacts(self.root), 'RUN_READY')
 
     async def test_rounding_happens_after_detection_extrema_and_threshold_counts(self):
         for row in self.nodes:
@@ -212,7 +231,7 @@ class UnifiedTests(unittest.IsolatedAsyncioTestCase):
              patch('workflow_agents.evidence.evidence_builder.resolve_run_root', return_value=self.root):
             response = run_workflow_stage('m', 'r')
         self.assertTrue(response['ok'])
-        self.assertEqual(load_package(self.root)['schema_version'], '1.1')
+        self.assertEqual(load_package(self.root)['schema_version'], PACKAGE_VERSION)
 
     def test_run_stage_builds_only_evidence_and_returns_task_preparation(self):
         state = {'model_name': 'm', 'run_id': 'r', 'state': 'RUN_READY'}

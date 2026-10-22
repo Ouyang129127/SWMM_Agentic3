@@ -2,6 +2,10 @@ import json
 import re
 from workflow_agents.common.hashing import sha256_file
 
+
+class ObsoleteTaskError(ValueError):
+    """A retained task whose evidence contract predates the current policy."""
+
 def remember_active_task(root, state):
     from workflow_agents.common.json_io import _write
     _write(root / 'diagnosis_tasks/active_task.json', {
@@ -10,7 +14,11 @@ def remember_active_task(root, state):
 
 def load_active_task(model_name, run_id, task_id='', kind=None):
     from workflow_agents.orchestration.investigation import resolve_run_root
+    from workflow_agents.evidence.evidence_package import PACKAGE_VERSION, load_package
+    from workflow_agents.evidence.evidence_selection import SELECTION_VERSION
     root = resolve_run_root(model_name, run_id)
+    # Never resume an old whole-network snapshot after a topology-policy upgrade.
+    load_package(root)
     tasks = root / 'diagnosis_tasks'
     source_hash = sha256_file(root / 'evidence/evidence_package.json')
 
@@ -19,6 +27,11 @@ def load_active_task(model_name, run_id, task_id='', kind=None):
             raise ValueError('Invalid task_id')
         path = tasks / identifier / 'task.json'
         state = json.loads(path.read_text(encoding='utf-8'))
+        if (state.get('evidence_package_version') != PACKAGE_VERSION
+                or state.get('selection_version') != SELECTION_VERSION):
+            if explicit:
+                raise ObsoleteTaskError('旧任务格式或拓扑范围不受支持；请重建证据并创建新诊断任务，无须重新模拟。')
+            return None
         if (state['task_id'] != identifier or state['model_name'] != root.parents[1].name
                 or state['run_id'] != root.name or state['source_hash'] != source_hash):
             if explicit:

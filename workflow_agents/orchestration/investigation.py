@@ -36,12 +36,12 @@ async def advance_investigation(model_name, run_id, action='prepare', task_id=''
             raise ValueError('Task belongs to another run')
         if question and question != state['task_context']['original_question']:
             raise ValueError('Changed question requires a new confirmed task')
+        if state.get('evidence_package_version') != PACKAGE_VERSION or state.get('selection_version') != SELECTION_VERSION:
+            raise ValueError('旧任务格式或拓扑范围不受支持；请用已有模拟重建统一证据包并创建新诊断任务，无须重新模拟。')
         if state['snapshot_hash'] != sha256_file(directory / 'evidence_snapshot.json'):
             raise ValueError('Evidence snapshot changed; prepare a new task')
         rows = _read(directory / 'evidence_snapshot.json')
         rows = load_supplements(root, directory, state, rows)
-        if state.get('evidence_package_version') != PACKAGE_VERSION or state.get('selection_version') != SELECTION_VERSION:
-            raise ValueError('旧任务格式不受支持；请重建统一证据包并创建新诊断任务。')
         visible_id_set = set(state['visible_ids'])
         visible = [r for r in rows if r['evidence_id'] in visible_id_set]
         if state.get('task_kind') == 'initial_overflow':

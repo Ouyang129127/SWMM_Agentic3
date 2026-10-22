@@ -1,0 +1,65 @@
+{
+  "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261020_223309_3641fc9e",
+  "target_node": "10",
+  "policy": "upstream_one_pipe_downstream_corridor_nodes_retained",
+  "upstream_nodes": [
+    "9",
+    "10"
+  ],
+  "upstream_links": [
+    "1"
+  ],
+  "downstream_nodes": [
+    "10",
+    "16",
+    "17",
+    "18",
+    "21",
+    "22",
+    "24"
+  ],
+  "downstream_links": [
+    "6",
+    "7",
+    "8",
+    "10",
+    "15",
+    "16"
+  ],
+  "all_selected_nodes": [
+    "9",
+    "10",
+    "16",
+    "17",
+    "18",
+    "21",
+    "22",
+    "24"
+  ],
+  "all_selected_links": [
+    "1",
+    "6",
+    "7",
+    "8",
+    "10",
+    "15",
+    "16"
+  ],
+  "excluded_nodes": [
+    "13",
+    "14",
+    "15",
+    "19",
+    "20",
+    "23"
+  ],
+  "excluded_links": [
+    "4",
+    "5",
+    "11",
+    "12",
+    "13",
+    "14"
+  ],
+  "note": "Preview only; no workflow changes or model calls. Schematic catchments are background, not evidence of surface attribution."
+}

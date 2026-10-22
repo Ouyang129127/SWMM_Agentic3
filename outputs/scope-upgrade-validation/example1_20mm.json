@@ -1,0 +1,168 @@
+{
+  "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261020_223309_3641fc9e",
+  "simulation_performed": false,
+  "llm_called": false,
+  "status": "passed",
+  "scope_policy": "upstream_one_segment_downstream_confluence_v1",
+  "package_version": "1.2",
+  "event_count": 1,
+  "event_scope_changes": [
+    {
+      "event_id": "10:E001",
+      "before": {
+        "nodes": [
+          "10",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "9"
+        ],
+        "links": [
+          "1",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8"
+        ]
+      },
+      "after": {
+        "nodes": [
+          "10",
+          "21",
+          "9"
+        ],
+        "links": [
+          "1",
+          "6"
+        ]
+      },
+      "boundaries": {
+        "21": [
+          "confluence"
+        ],
+        "9": [
+          "terminal"
+        ]
+      }
+    }
+  ],
+  "additional_topology_only_targets": {
+    "21": {
+      "policy": "upstream_one_segment_downstream_confluence_v1",
+      "target_node": "21",
+      "status": "complete_for_policy",
+      "direction_basis": "input from_node/to_node; not inferred actual flow or causal direction",
+      "direct_links": [
+        "5",
+        "6",
+        "7"
+      ],
+      "traces": [
+        {
+          "origin_node": "21",
+          "direction": "upstream",
+          "role": "main",
+          "nodes": [
+            "21",
+            "20"
+          ],
+          "links": [
+            "5"
+          ],
+          "stop_node": "20",
+          "stop_reason": "upstream_one_segment"
+        },
+        {
+          "origin_node": "21",
+          "direction": "upstream",
+          "role": "main",
+          "nodes": [
+            "21",
+            "10"
+          ],
+          "links": [
+            "6"
+          ],
+          "stop_node": "10",
+          "stop_reason": "upstream_one_segment"
+        },
+        {
+          "origin_node": "21",
+          "direction": "downstream",
+          "role": "main",
+          "nodes": [
+            "21",
+            "22",
+            "16"
+          ],
+          "links": [
+            "7",
+            "8"
+          ],
+          "stop_node": "16",
+          "stop_reason": "confluence"
+        }
+      ],
+      "boundary_nodes": {
+        "10": [
+          "upstream_one_segment"
+        ],
+        "16": [
+          "confluence"
+        ],
+        "20": [
+          "upstream_one_segment"
+        ]
+      },
+      "boundary_links": {},
+      "unresolved_branches": [],
+      "node_roles": {
+        "10": "boundary",
+        "16": "boundary",
+        "20": "boundary",
+        "21": "target",
+        "22": "corridor"
+      },
+      "link_roles": {
+        "5": "corridor",
+        "6": "corridor",
+        "7": "corridor",
+        "8": "corridor"
+      },
+      "missing_node_definitions": [],
+      "limitations": [
+        "Upstream scope retains only each target incoming link and its endpoint.",
+        "Downstream scope retains the first confluence, facility, special node or terminal boundary.",
+        "No side branches or extra links at corridor/boundary nodes are automatically included.",
+        "A pure downstream split stops with partial coverage; selecting further paths requires supplementation.",
+        "Target direct exchanges remain visible when the target itself splits; no branch is followed beyond them.",
+        "Intermediate lateral inflows are node processes, not additional direct target sources.",
+        "Topology completeness does not establish causal completeness; reversals may need investigation."
+      ]
+    }
+  },
+  "old_process_characters": 668122,
+  "new_process_characters": 166029,
+  "process_character_reduction_percent": 75.15,
+  "prepared_task_event_count": 1,
+  "serialized_user_prompt_characters": 204386,
+  "retained_samples_and_other_facts_unchanged": true,
+  "source_run_unchanged": true
+}

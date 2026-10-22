@@ -14,7 +14,7 @@ from workflow_agents import load_scenario_request, prepare_scenario_request
 from workflow_agents.common.schemas import EVIDENCE_READY, NO_SURFACE_INFLOW, RUN_READY, SCENARIO_READY
 from workflow_agents.common.state import load_or_initialize_state
 from workflow_agents.orchestration.investigation import advance_investigation
-from workflow_agents.orchestration.investigation_flow import load_active_task
+from workflow_agents.orchestration.investigation_flow import ObsoleteTaskError, load_active_task
 from workflow_agents.orchestration.session_state import WebWorkflow, ACTION_LABELS, TASK_ACTIONS
 from workflow_agents.interfaces.presentation import details, error_summary, is_context_limit_error, chat_history_summary
 from workflow_agents.common.paths import MODELS_DIR, RUNTIME_DIR
@@ -36,6 +36,8 @@ async def run_orchestrator_turn(transcript: list[dict[str, str]], flow: WebWorkf
         if not flow.run_id and flow.status == 'idle':
             adopt_legacy_binding(flow, transcript)
         detail = ''
+        if flow.run_id:
+            refresh_web_workflow(flow)
         if flow.task_id:
             state = await advance_investigation(flow.model_name, flow.run_id, 'status', flow.task_id)
             detail = format_investigation_result(state, include_next=False) + '\n\n'
@@ -214,7 +216,12 @@ def refresh_web_workflow(flow):
     if root.parents[1].name != flow.model_name:
         raise ValueError('当前绑定的模型／运行不一致。')
     if run['state'] == EVIDENCE_READY:
-        state = load_active_task(flow.model_name, flow.run_id, flow.task_id)
+        try:
+            state = load_active_task(flow.model_name, flow.run_id, flow.task_id)
+        except ObsoleteTaskError:
+            # Drop only the UI binding, never the historical task or reports.
+            flow.task_id, flow.last_error = '', ''
+            state = None
         if state:
             flow.task_id = state['task_id']
             flow.next_action = TASK_ACTIONS.get(state['state'], '')
@@ -229,6 +236,9 @@ def refresh_web_workflow(flow):
         else:
             flow.next_action = 'prepare_diagnosis'
     else:
+        # An obsolete evidence package must be rebuilt before any old task can
+        # continue. Retaining its UI task ID would block refresh after rebuild.
+        flow.task_id, flow.last_error = '', ''
         flow.next_action = {SCENARIO_READY: 'simulation', RUN_READY: 'evidence_building',
                             NO_SURFACE_INFLOW: 'evidence_building'}.get(run['state'], '')
         if not flow.next_action:

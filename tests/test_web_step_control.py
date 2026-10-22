@@ -69,6 +69,43 @@ class StepControlTests(unittest.IsolatedAsyncioTestCase):
             return await advance_investigation('m', 'r', 'initial',
                        complete=AsyncMock(side_effect=lambda p: answer(p, requests)))
 
+    async def test_old_topology_binding_proposes_new_task_without_deleting_history(self):
+        state = await advance_investigation('m', 'r')
+        path = self.root / 'diagnosis_tasks' / state['task_id'] / 'task.json'
+        old = json.loads(path.read_text(encoding='utf-8'))
+        old['evidence_package_version'] = '1.1'
+        path.write_text(json.dumps(old), encoding='utf-8')
+        saved = path.read_bytes()
+        self.bind(state['task_id'])
+        self.assertEqual(self.flow.task_id, '')
+        self.assertEqual(self.flow.next_action, 'prepare_diagnosis')
+        self.assertEqual(path.read_bytes(), saved)
+
+    async def test_old_evidence_routes_to_rebuild_then_new_task_with_same_simulation(self):
+        state = await advance_investigation('m', 'r')
+        path = self.root / 'diagnosis_tasks' / state['task_id'] / 'task.json'
+        old = json.loads(path.read_text(encoding='utf-8'))
+        old['evidence_package_version'] = '1.1'
+        path.write_text(json.dumps(old), encoding='utf-8')
+        saved = path.read_bytes()
+        package_path = self.root / 'evidence/evidence_package.json'
+        package = json.loads(package_path.read_text(encoding='utf-8'))
+        package['schema_version'] = '1.1'
+        package_path.write_text(json.dumps(package), encoding='utf-8')
+        (self.root / 'swmm').mkdir(exist_ok=True)
+        (self.root / 'swmm/nodes.tsv').write_text('saved nodes', encoding='utf-8')
+        (self.root / 'swmm/links.tsv').write_text('saved links', encoding='utf-8')
+        (self.root / 'summary.json').write_text(json.dumps({'ca2d': {'status': 'NO_SURFACE_INFLOW'}}), encoding='utf-8')
+        web_app.bind_web_run(self.flow, 'm', 'r', state['task_id'])
+        web_app.refresh_web_workflow(self.flow)
+        self.assertEqual(self.flow.next_action, 'evidence_building')
+        self.assertEqual(self.flow.task_id, '')
+        fixture(self.root)
+        save_state(self.root, build_state('m', 'r', self.root, state='EVIDENCE_READY'))
+        web_app.refresh_web_workflow(self.flow)
+        self.assertEqual(self.flow.next_action, 'prepare_diagnosis')
+        self.assertEqual(path.read_bytes(), saved)
+
     async def test_original_user_request_only_plans_and_requires_rainfall_choice(self):
         with patch('workflow_agents.orchestration.controller.prepare_scenario_request') as scenario, \
              patch('workflow_agents.orchestration.controller.run_simulation_from_scenario_request') as simulation, \

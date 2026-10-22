@@ -98,7 +98,7 @@ class FirstPassTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(facts['facility_actions'], 'not_extracted')
         self.assertEqual(facts['storage_volume_process'], 'not_extracted')
 
-    def test_expanded_process_keeps_lateral_heads_missingness_and_direct_composition(self):
+    def test_first_pass_does_not_extract_upstream_beyond_one_segment(self):
         self.inp.write_text(self.inp.read_text(encoding='utf-8') +
                             '\n[JUNCTIONS]\nU 10 3\nA 11 3\nB 11 3\nAA 12 3\n'
                             '[CONDUITS]\nLU U N0 10 .013 0 0\nLA A U 10 .013 0 0\n'
@@ -117,15 +117,16 @@ class FirstPassTests(unittest.IsolatedAsyncioTestCase):
             requested.update(ids)
             return self.native, {'status': 'test_fixture'}
         package = build_event_evidence(self.root, self.catalog, binary_reader=reader)
-        self.assertEqual(requested, {'N0', 'N1', 'N2', 'U', 'A', 'B'})
+        self.assertEqual(requested, {'N0', 'N1', 'N2'})
         structure = self.value(package, 'local_structure')
-        self.assertEqual(structure['topology_scope']['boundary_nodes']['U'], ['confluence'])
-        self.assertNotIn('LAA', structure['links'])
+        self.assertEqual(structure['topology_scope']['boundary_nodes']['N0'], ['upstream_one_segment'])
+        self.assertEqual(set(structure['nodes']), {'N0', 'N1', 'N2'})
+        self.assertEqual(set(structure['links']), {'L1', 'L2'})
         sample = self.value(package, 'local_process_series')['series'][1]
-        self.assertEqual(sample['nodes']['U']['lateral_inflow_Ls'], 17)
-        self.assertIsNone(sample['nodes']['A']['lateral_inflow_Ls'])
-        self.assertEqual(sample['links']['LU']['signed_model_flow_Ls'], -7)
-        self.assertEqual(sample['links']['LU']['from_minus_to_head_m'], 5)
+        self.assertEqual(set(sample['nodes']), {'N0', 'N1', 'N2'})
+        self.assertEqual(set(sample['links']), {'L1', 'L2'})
+        self.assertEqual(sample['nodes']['N0']['lateral_inflow_Ls'], 3)
+        self.assertEqual(sample['links']['L1']['from_minus_to_head_m'], 0)
         self.assertEqual(set(sample['signed_towards_node_Ls']), {'L1', 'L2', 'aggregate_lateral'})
         composition = self.value(package, 'direct_source_composition')
         self.assertAlmostEqual(composition['volume_denominator_m3'], 1.08)
@@ -141,6 +142,41 @@ class FirstPassTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(all(s['event_volume_share'] is None for s in composition['sources']))
         self.write_table(self.root / 'swmm/links.tsv', [r for r in self.link_rows if r['link_id'] == 'L1'])
         self.assertEqual(self.value(self.build(), 'direct_source_composition')['status'], 'partial')
+
+    def test_downstream_boundary_process_is_kept_without_tributary_or_beyond_data(self):
+        self.inp.write_text(self.inp.read_text(encoding='utf-8') +
+                            '\n[JUNCTIONS]\nD 6 3\nS 7 3\nZ 5 3\n'
+                            '[CONDUITS]\nL3 N2 D 10 .013 0 0\nSIDE S D 10 .013 0 0\n'
+                            'AFTER D Z 10 .013 0 0\n', encoding='utf-8')
+        for node in ('D', 'S', 'Z'):
+            for i in range(4):
+                self.node_rows.append(dict(node_id=node, date='2024-01-01', time=f'00:0{i}:00',
+                                           depth_m=2, flooding_Ls=0))
+        for key in ('L3', 'SIDE', 'AFTER'):
+            for i in range(4):
+                self.link_rows.append(dict(link_id=key, date='2024-01-01', time=f'00:0{i}:00',
+                                           flow_Ls=-7, depth_m=.5))
+        self.write_table(self.root / 'swmm/nodes.tsv', self.node_rows)
+        self.write_table(self.root / 'swmm/links.tsv', self.link_rows)
+        requested = set()
+        def reader(path, ids):
+            requested.update(ids)
+            return self.native, {'status': 'test_fixture'}
+        package = build_event_evidence(self.root, self.catalog, binary_reader=reader)
+        self.assertEqual(requested, {'N0', 'N1', 'N2', 'D'})
+        structure = self.value(package, 'local_structure')
+        self.assertEqual(structure['topology_scope']['boundary_nodes']['D'], ['confluence'])
+        self.assertEqual(set(structure['links']), {'L1', 'L2', 'L3'})
+        samples = self.value(package, 'local_process_series')['series']
+        for sample in samples:
+            self.assertEqual(set(sample['nodes']), {'N0', 'N1', 'N2', 'D'})
+            self.assertEqual(set(sample['links']), {'L1', 'L2', 'L3'})
+            self.assertIsNone(sample['nodes']['D']['lateral_inflow_Ls'])
+            self.assertEqual(sample['nodes']['D']['head_m'], 8)
+        self.assertEqual(samples[1]['links']['L3']['signed_model_flow_Ls'], -7)
+        self.assertEqual(samples[1]['links']['L3']['from_minus_to_head_m'], 2)
+        self.assertEqual(set(samples[1]['signed_towards_node_Ls']), {'L1', 'L2', 'aggregate_lateral'})
+        self.assertAlmostEqual(self.value(package, 'direct_source_composition')['volume_denominator_m3'], 1.08)
 
     async def test_investigation_receives_prebuilt_package(self):
         package = self.build()

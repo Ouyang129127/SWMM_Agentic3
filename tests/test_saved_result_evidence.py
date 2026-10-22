@@ -125,6 +125,31 @@ class SavedResultTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(value['maxima']['L1']['maximum'], .3)
         self.assertEqual(value['maxima']['L1']['times'], ['2024-01-01 00:03:00'])
 
+    def test_explicit_supplement_can_cross_initial_confluence_boundary(self):
+        from workflow_agents.evidence.event_packages import parse_run_input
+        from workflow_agents.evidence.topology_scope import build_topology_scope
+        path = self.root / 'swmm/model_with_event.inp'
+        path.write_text(path.read_text(encoding='utf-8') +
+                        '\n[JUNCTIONS]\nN3 0 1 0\nS 0 1 0\n'
+                        '[CONDUITS]\nL2 N2 N3 10 .01 0 0\nSIDE S N2 10 .01 0 0\n'
+                        '[XSECTIONS]\nL2 CIRCULAR 1 0 0 0\n', encoding='utf-8')
+        scope = build_topology_scope(parse_run_input(path), 'N1')
+        self.assertEqual(set(scope['link_roles']), {'L1'})
+        self.assertEqual(scope['boundary_nodes']['N2'], ['confluence'])
+        table = self.root / 'swmm/links.tsv'
+        with table.open('a', encoding='utf-8') as stream:
+            stream.writelines(f'L2\t2024-01-01\t00:{i:02}:00\t{i}\t0.5\n' for i in range(21))
+        initial_package = (self.root / 'evidence/evidence_package.json').read_bytes()
+        request = self.request(object_ids=['L2'])
+        plan = plan_request(self.root, self.package['evidence_rows'], request)
+        self.assertTrue(plan['requires_extraction'])
+        supplement = extract(self.root, plan)
+        self.assertEqual(supplement['evidence_rows'][0]['value']['resolved_scope']['links'], ['L2'])
+        samples = supplement['evidence_rows'][0]['value']['series']
+        self.assertEqual(len(samples), 21)
+        self.assertEqual(set(samples[0]['links']), {'L2'})
+        self.assertEqual((self.root / 'evidence/evidence_package.json').read_bytes(), initial_package)
+
     def test_finer_resolution_unknown_object_and_unknown_method_are_explicit(self):
         rows = self.package['evidence_rows']
         plan = plan_request(self.root, rows, self.request(sample_interval_seconds=10))

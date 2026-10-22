@@ -1,0 +1,1580 @@
+{
+  "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261020_223309_3641fc9e",
+  "revision": 1,
+  "diagnosis_source": "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261020_223309_3641fc9e\\diagnosis_tasks\\4eab2228f2a54ef180355bcb8f31bbaf\\diagnosis_r1.json",
+  "trace_basis": "人工逐条核对已交付文本与引用ID；不是LLM内部访问日志，不能证明未提及数据从未影响模型。",
+  "validation_limit": "本表追踪声明的依赖，不认证原结论的数值、推理或因果正确性。",
+  "key_limitation": "EvidenceID覆盖整包local_process_series/structure，尚无模型声明的对象-字段-样本级引用。",
+  "explicit_process_object_union": {
+    "nodes": [
+      "9",
+      "10",
+      "21"
+    ],
+    "links": [
+      "1",
+      "6"
+    ]
+  },
+  "records": [
+    {
+      "id": "D1:C1",
+      "title": "起溢时刻",
+      "text": "节点10在2024-01-01 01:36:40由未冒溢转为冒溢；01:36:35 flooding_Ls=0，01:36:40 flooding_Ls=81.584。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "节点10冒溢流量；事件开始时间、保存步长与截断状态",
+      "time": "01:36:35、01:36:40",
+      "note": "无额外全网过程依赖",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4",
+        "FP_bd39996c19e0d97f7119"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C2",
+      "title": "冒溢位置及地表关联缺失",
+      "text": "本次管网冒溢位置为节点10，且全场仅节点10发生冒溢；地表积水位置未建立关联。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "事件目录、全场冒溢节点列表、surface_association状态",
+      "time": "本次全场",
+      "note": "全网14节点的冒溢存在性核对；不需要14节点全部水力时序",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4",
+        "SUM_EVT_4c38dbd152b81b118a9f66f2",
+        "FP_7ae0911a87c1d5467b28"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "SUM_EVT_4c38dbd152b81b118a9f66f2",
+          "metric": "overflow_event_overview",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_7ae0911a87c1d5467b28",
+          "metric": "surface_association",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C3",
+      "title": "冒溢体积与峰值",
+      "text": "节点10本次事件估计冒溢体积82.855 m3，峰值冒溢流量151.048 L/s（01:40:10）。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "事件积分体积、峰值流量与峰值时刻",
+      "time": "01:36:40—01:53:40；峰值01:40:10",
+      "note": "事件事实由程序计算；该结论未引用过程时序包",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C4",
+      "title": "持续时间及单次连续冒溢",
+      "text": "节点10为单次连续冒溢事件，持续17.0min，01:36:40开始、01:53:40结束，未左截断或右截断。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "事件起止、持续时间、截断标志；全场事件目录",
+      "time": "01:36:40—01:53:40",
+      "note": "引用全场事件目录，不等于逐节点过程分析",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4",
+        "SUM_EVT_4c38dbd152b81b118a9f66f2"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "SUM_EVT_4c38dbd152b81b118a9f66f2",
+          "metric": "overflow_event_overview",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C5",
+      "title": "两路来水集中",
+      "text": "节点10两路直接来水在降雨峰后同步增长：link1与aggregate_lateral各贡献约50.2%和49.8%的进入体积，且均在01:40:10达到各自峰值，与总入流及冒溢峰值同刻，形成明显的时间集中。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "1"
+      ],
+      "data_fields": "节点10侧向入流、总入流与冒溢；管1进入流量与体积；降雨峰时",
+      "time": "01:35降雨峰；01:36:35—01:40:10增长；事件积分时窗",
+      "note": "管1连接节点9，但本条未明确使用节点9自身时序",
+      "evidence_ids": [
+        "FP_b8d98cadddd0a1ea92ab",
+        "FP_bd39996c19e0d97f7119",
+        "CTX_RAINFALL"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+          "metric": "direct_source_composition",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "CTX_RAINFALL",
+          "metric": "rainfall_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C6",
+      "title": "直接出口管6的排出约束",
+      "text": "link6（10→21）是节点10的直接下游出口，管径0.3048m；事件中其流量稳定在约164.048 L/s、水深约0.297m（约0.974满度），而节点10总入流峰值315.142 L/s，峰值超出量约151.094 L/s，与峰值冒溢151.048 L/s接近，表明该出口容量约束直接对应冒溢增量。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "节点10总入流、冒溢和水头；管6流量、水深、断面及连接",
+      "time": "事件时窗，尤其01:40:10",
+      "note": "节点21作为管6的结构端点出现；本条未单独比较节点21时序",
+      "evidence_ids": [
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "FP_76e2d6227ceba6965ad4"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C7",
+      "title": "节点10达到冒溢阈值及位置解释",
+      "text": "节点10井底303.276m、max_depth0.9144m；事件中head约304.19m、depth=0.914m时持续冒溢，而节点9深度约0.19m、节点21约0.50m，说明本节点先达到模型冒溢阈值，且位于小口径出口link6上游端。",
+      "explicit_process_nodes": [
+        "9",
+        "10",
+        "21"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "节点10井底、最大深度、水头、深度；节点9和21深度/最大深度；管6连接与断面",
+      "time": "事件时窗",
+      "note": "另引用全网冒溢次数统计；该统计本身不提供相邻节点的水深",
+      "evidence_ids": [
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "SUM_971bff070d59cd4df610aaa8"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "SUM_971bff070d59cd4df610aaa8",
+          "metric": "summary:node:overflow_event_count",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "D1:C8",
+      "title": "设施、初始状态及储量缺证",
+      "text": "已核实范围内无STORAGE节点、无泵闸堰孔口设施，节点initial_depth=0且ALLOW_PONDING=NO；动态储水体积过程尚未提取。",
+      "explicit_process_nodes": [],
+      "explicit_process_links": [],
+      "data_fields": "节点类型、initial_depth、ALLOW_PONDING、设施清单、储量提取状态",
+      "time": "本次运行输入及首轮证据状态",
+      "note": "使用已核实范围14节点/13管段的静态清单；无逐对象完整时序需求",
+      "evidence_ids": [
+        "FP_3176c89973b34f2bfbef",
+        "FP_4a998619e4a5e0e06202"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_3176c89973b34f2bfbef",
+          "metric": "facilities_and_storage",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M1",
+      "title": "来水集中",
+      "text": "直接来水组成显示link1与节点10侧向入流各约一半：link1进入125.716 m3（50.2%），aggregate_lateral进入124.567 m3（49.8%）。01:36:35—01:40:10两路同步增长，均在01:40:10达到峰值（157.097、158.045 L/s），与总入流峰值315.142 L/s及冒溢峰值151.048 L/s同一时段。降雨峰值01:35，起溢在其后约1.7min，支持来水时间集中对本次起溢和峰值的贡献；但不单独等同于唯一根因。",
+      "status": "supported",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "1"
+      ],
+      "data_fields": "直接来水组成、节点10过程、降雨及事件事实",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "同C5",
+      "evidence_ids": [
+        "FP_b8d98cadddd0a1ea92ab",
+        "FP_bd39996c19e0d97f7119",
+        "CTX_RAINFALL",
+        "FP_76e2d6227ceba6965ad4"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+          "metric": "direct_source_composition",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "CTX_RAINFALL",
+          "metric": "rainfall_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "局部输水约束",
+      "text": "节点10直接下游出口link6（10→21）管径0.3048m、出口偏移0.3048m，事件中流量快速稳定在约164.048 L/s，水深约0.297m，约为管径的0.974满度；同期节点10总入流由228 L/s升至315.142 L/s。峰值时总入流减link6排流约151.094 L/s，与峰值冒溢151.048 L/s接近，表明该出口在本工况下形成实际排出约束并直接对应冒溢增量。约束定位限定为本次baseline工况的link6，不泛化为其它水力条件下绝对容量上限。",
+      "status": "supported",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "节点10总入流/冒溢；管6流量、水深、断面及连接",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "同C6；21为结构端点",
+      "evidence_ids": [
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "FP_76e2d6227ceba6965ad4"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "下游顶托待补证",
+      "text": "运行上下文声明baseline为KINWAVE、不应推断下游顶托，但local_structure.options同时显示FLOW_ROUTING=DYNWAVE，模型演算方式元数据存在冲突，不能据冲突证据直接判not_applicable。可见过程显示节点10水头约304.19m高于下游节点21约302.25m，link6有符号流量方向为10→21，且summary显示13条管段方向变化计数均为0；但这些只说明本时窗未见反向流，不能替代下游边界水位过程或动态波反馈判断。需明确演算方式并核查下游21及更下游水头过程。",
+      "status": "needs_evidence",
+      "explicit_process_nodes": [
+        "10",
+        "21"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "节点10与21水头；管6有符号流量；FLOW_ROUTING及模型上下文",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "另引用全网13管段流向变化计数汇总；没有逐一分析这些管段的过程",
+      "evidence_ids": [
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "SUM_c86d435d44c300c3fd1ed334"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "SUM_c86d435d44c300c3fd1ed334",
+          "metric": "summary:link:flow_direction_changes",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "冒溢阈值及位置",
+      "text": "节点10井底303.276m、max_depth0.9144m、surcharge_depth=0，模型冒溢条件对应水头约304.1904m；事件中head_m约304.19、depth_m=0.914，flooding_Ls转正并持续。相邻上游节点9深度约0.19m、下游节点21约0.50m，未达各自0.9144m满深；节点10位于小口径出口link6的上游端，说明本节点在本模型工况下先达到冒溢阈值。该结论限于管网冒溢触发；地表积水位置因映射未构建不判断。",
+      "status": "supported",
+      "explicit_process_nodes": [
+        "9",
+        "10",
+        "21"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "同C7",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "另引用全网冒溢次数统计",
+      "evidence_ids": [
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "SUM_971bff070d59cd4df610aaa8"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "SUM_971bff070d59cd4df610aaa8",
+          "metric": "summary:node:overflow_event_count",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "M5",
+      "title": "设施运行不适用",
+      "text": "已核实的局部结构及设施清单中PUMPS=0、ORIFICES=0、WEIRS=0、OUTLETS=0，local_facilities为空，controls_present=false；在已调查的节点10—link6及相邻水力路径内未见泵、闸、堰、孔口等设施运行参与本次事件。结论限定于本次已核实结构范围，不排除范围外设施。",
+      "status": "not_applicable",
+      "explicit_process_nodes": [],
+      "explicit_process_links": [],
+      "data_fields": "设施清单、控制规则与结构",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "全范围静态清单；无具体远端对象时序分析",
+      "evidence_ids": [
+        "FP_3176c89973b34f2bfbef",
+        "FP_4a998619e4a5e0e06202"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_3176c89973b34f2bfbef",
+          "metric": "facilities_and_storage",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M6",
+      "title": "动态储水待补证",
+      "text": "结构证据显示无STORAGE节点、节点initial_depth=0、ALLOW_PONDING=NO，因而不支持固定蓄水设施或初始蓄水作为本次冒溢前提。但本次仅提取了设施与初始状态，storage_volume_process未提取；节点10从约0.455m涨至0.914m、link6接近满管，普通节点/管段动态储水及其对起溢时刻的影响量尚未量化，故不能判断其缓解或加重程度。",
+      "status": "needs_evidence",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "6"
+      ],
+      "data_fields": "节点10深度变化、管6状态、初始条件与储量缺证状态",
+      "time": "首轮事件窗口；所引全网统计为其独立源时窗",
+      "note": "结合全范围静态类型清单；未获得储量过程即保留未知",
+      "evidence_ids": [
+        "FP_3176c89973b34f2bfbef",
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_3176c89973b34f2bfbef",
+          "metric": "facilities_and_storage",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "EVENT_PROCESS",
+      "title": "事件过程解释",
+      "text": "01:36:35节点10尚未冒溢；01:36:40出现81.584 L/s并进入连续冒溢。01:36:35—01:40:10期间，link1来水由约110.0升至157.1 L/s、节点10侧向入流由约115.0升至158.0 L/s，总入流由225.0升至315.142 L/s，两直接来源同步增长；同期直接下游link6排流快速稳定在约164.048 L/s且接近满管，节点10水头保持约304.19m、深度0.914m，达到max_depth=0.9144m对应的模型冒溢条件。峰值时总入流减link6排流约151.094 L/s，与峰值冒溢151.048 L/s接近。此后入流与两来源回落，01:53:40冒溢归零。模型路由元数据在KINWAVE与DYNWAVE间存在冲突，故本轮不把下游顶托纳入综合解释；无STORAGE节点、初始深度为0且ALLOW_PONDING=NO，但动态储水体积尚未量化。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "1",
+        "6"
+      ],
+      "data_fields": "见原文及引用证据列表",
+      "time": "见原文；各统计保留自身源时窗",
+      "note": "主要复述C1/C3/C5/C6及静态初始条件；未逐一解释远端节点管段",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4",
+        "FP_4a998619e4a5e0e06202",
+        "FP_bd39996c19e0d97f7119",
+        "FP_b8d98cadddd0a1ea92ab",
+        "FP_3176c89973b34f2bfbef",
+        "CTX_RAINFALL"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+          "metric": "direct_source_composition",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_3176c89973b34f2bfbef",
+          "metric": "facilities_and_storage",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "CTX_RAINFALL",
+          "metric": "rainfall_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "JOINT",
+      "title": "综合机制结论",
+      "text": "节点10本次冒溢可由同一事件中的来水时间集中、直接下游出口容量约束和本节点冒溢阈值共同解释：降雨峰值后两路直接来水同步增长，向节点10输送约315 L/s峰值入流；link6以约164 L/s接近满管排流，形成约151 L/s的超出量；节点10随即充满至max_depth并持续冒溢17min。\n01:36:40起溢与降雨峰01:35后的两路来水增长相接；01:36:35—01:40:10总入流由225.0升至315.142 L/s，同期link6排流稳定在约164.048 L/s，二者差值与flooding_Ls同步扩大并在01:40:10达峰151.048 L/s；节点10水头约304.19m、深度0.914m，达到其0.9144m最大深度对应的模型冒溢条件。M1提供入流峰值时间结构，M2提供排出瓶颈，M4解释为何在节点10达到阈值。M3因模型路由元数据冲突未决，未纳入综合；M6动态储水尚未量化。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "1",
+        "6"
+      ],
+      "data_fields": "见原文及引用证据列表",
+      "time": "见原文；各统计保留自身源时窗",
+      "note": "综合M1/M2/M4；未出现独立的远端支路过程分析",
+      "evidence_ids": [
+        "FP_76e2d6227ceba6965ad4",
+        "FP_bd39996c19e0d97f7119",
+        "FP_b8d98cadddd0a1ea92ab",
+        "FP_4a998619e4a5e0e06202",
+        "CTX_RAINFALL"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+          "metric": "direct_source_composition",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_4a998619e4a5e0e06202",
+          "metric": "local_structure",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "CTX_RAINFALL",
+          "metric": "rainfall_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "OVERVIEW",
+      "title": "全场概览",
+      "text": "本次Example1运行全场仅识别到1个管网冒溢事件：节点10在2024-01-01 01:36:40—01:53:40连续冒溢17.0min，峰值151.048 L/s于01:40:10，估计体积82.855 m3；其余13个节点无冒溢。雨情为4h总降雨20mm、峰值36.683 mm/h（01:35）的中等降雨，冒溢紧随雨峰后发生。事件期节点10两路直接来水约各半并在01:40:10同步达峰；直接下游link6流量稳定在约164 L/s且接近满管，节点10水头达到约304.19m的冒溢条件。CA2D地表统计显示网格最大水深达0.226m、正积水时长最多320min，但surface_association未构建，不能把网格积水位置直接归因到节点10。",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [
+        "1",
+        "6"
+      ],
+      "data_fields": "见原文及引用证据列表",
+      "time": "见原文；各统计保留自身源时窗",
+      "note": "还使用全场事件、降雨及地表最大水深/积水时长汇总；地表统计不是节点来源归因",
+      "evidence_ids": [
+        "CTX_RAINFALL",
+        "SUM_EVT_4c38dbd152b81b118a9f66f2",
+        "FP_76e2d6227ceba6965ad4",
+        "FP_bd39996c19e0d97f7119",
+        "FP_b8d98cadddd0a1ea92ab",
+        "SUM_50fae830c1022ef147ef8014",
+        "SUM_06aef4995d34123dd7169c56"
+      ],
+      "cited_rows": [
+        {
+          "evidence_id": "CTX_RAINFALL",
+          "metric": "rainfall_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "SUM_EVT_4c38dbd152b81b118a9f66f2",
+          "metric": "overflow_event_overview",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_76e2d6227ceba6965ad4",
+          "metric": "event_context",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "FP_bd39996c19e0d97f7119",
+          "metric": "local_process_series",
+          "containing_row_object_coverage": {
+            "nodes": [
+              "9",
+              "10",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24"
+            ],
+            "links": [
+              "1",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16"
+            ]
+          }
+        },
+        {
+          "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+          "metric": "direct_source_composition",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "SUM_50fae830c1022ef147ef8014",
+          "metric": "summary:cell:max_depth",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        },
+        {
+          "evidence_id": "SUM_06aef4995d34123dd7169c56",
+          "metric": "summary:cell:ponding_duration",
+          "containing_row_object_coverage": {
+            "nodes": [],
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "Q1",
+      "title": "四问回答状态",
+      "text": "节点10起溢时刻可定位于2024-01-01 01:36:40；前一保存步01:36:35 flooding_Ls=0，事件未被左截断，保存步长5s。",
+      "status": "answered",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "对应D1:C1",
+      "time": "同对应claim",
+      "note": "该字段无独立evidence_ids；这里按内容映射，不伪装为其显式引用",
+      "evidence_ids": [],
+      "cited_rows": []
+    },
+    {
+      "id": "Q2",
+      "title": "四问回答状态",
+      "text": "管网冒溢位置明确为节点10，overview显示全场仅节点10发生冒溢；节点10是目标节点且为唯一overflow_node。地表积水位置未建立映射，surface_association状态为not_built，故只能回答管网冒溢点，不能回答地表去向。",
+      "status": "answered",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "对应D1:C2",
+      "time": "同对应claim",
+      "note": "该字段无独立evidence_ids；这里按内容映射，不伪装为其显式引用",
+      "evidence_ids": [],
+      "cited_rows": []
+    },
+    {
+      "id": "Q3",
+      "title": "四问回答状态",
+      "text": "节点10本次事件估计冒溢体积82.855 m3，采用左样矩形积分；该值是保存样本事件积分，不是求解器完整水量平衡。",
+      "status": "answered",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "对应D1:C3",
+      "time": "同对应claim",
+      "note": "该字段无独立evidence_ids；这里按内容映射，不伪装为其显式引用",
+      "evidence_ids": [],
+      "cited_rows": []
+    },
+    {
+      "id": "Q4",
+      "title": "四问回答状态",
+      "text": "节点10为单次连续冒溢事件，01:36:40—01:53:40，持续17.0min，正样本204个，左右均未截断；全场仅此一个冒溢事件。",
+      "status": "answered",
+      "explicit_process_nodes": [
+        "10"
+      ],
+      "explicit_process_links": [],
+      "data_fields": "对应D1:C4",
+      "time": "同对应claim",
+      "note": "该字段无独立evidence_ids；这里按内容映射，不伪装为其显式引用",
+      "evidence_ids": [],
+      "cited_rows": []
+    }
+  ],
+  "attempts": [
+    {
+      "attempt_id": "b5de36c54f2a4a08bf23b14d45dafef3",
+      "status": "completed",
+      "phase": "validated",
+      "started_at": "2026-10-20T14:35:50.384513+00:00",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 281918,
+        "completion_tokens": 16215
+      },
+      "request_characters": 722734
+    },
+    {
+      "attempt_id": "ce2e152ae66a4bd7a33f4cbd5961f9cc",
+      "status": "failed",
+      "phase": "parsing",
+      "started_at": "2026-10-20T15:02:46.480406+00:00",
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 1048295,
+        "completion_tokens": 281
+      },
+      "request_characters": 2571822
+    },
+    {
+      "attempt_id": "0c70c2df1140450380fc201b12d09b2a",
+      "status": "failed",
+      "phase": "parsing",
+      "started_at": "2026-10-20T15:03:03.494238+00:00",
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 1048348,
+        "completion_tokens": 228
+      },
+      "request_characters": 2571981
+    },
+    {
+      "attempt_id": "e95e578e79c14d98b96bf273f6c28818",
+      "status": "failed",
+      "phase": "parsing",
+      "started_at": "2026-10-20T15:03:35.652578+00:00",
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 1048348,
+        "completion_tokens": 228
+      },
+      "request_characters": 2571981
+    },
+    {
+      "attempt_id": "26963c8cf0ba4810a29c90610c2c1e7d",
+      "status": "failed",
+      "phase": "parsing",
+      "started_at": "2026-10-20T15:03:40.210394+00:00",
+      "finish_reason": "length",
+      "usage": {
+        "prompt_tokens": 1048348,
+        "completion_tokens": 228
+      },
+      "request_characters": 2571981
+    }
+  ]
+}

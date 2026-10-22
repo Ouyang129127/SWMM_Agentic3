@@ -201,7 +201,7 @@ def plan_request(root, rows, request):
                            sample_interval_seconds=request.get('sample_interval_seconds')))
     resolved = {'method': VERSION, 'metric_name': metric, 'scopes': scopes,
                 'source_files': sorted(required),
-                'scope_note': '只按结构化参数执行；reason为调查目的。缺省事件时窗前后各扩展一个相应结果保存步长（地表采用地表保存步长）；未指定管段时取事件节点直接连接管段，过程取其两端节点。'}
+                'scope_note': '只按结构化参数执行；reason为调查目的。缺省事件时窗前后各扩展一个相应结果保存步长（地表采用地表保存步长）。补证可越过首轮基础边界；节点管网过程请求取所请求节点的直接连接管段及两端节点，管段过程请求取所请求管段及两端节点，不继续沿侧支追踪。'}
     signature = digest(resolved)
     wanted = {scope_signature(resolved, scope) for scope in scopes}
     existing = [r['evidence_id'] for r in rows if _row_scope_signature(r) in wanted]

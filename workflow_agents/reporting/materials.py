@@ -164,6 +164,32 @@ def check_rounded_event_volumes(events, raw_events):
         raise ValueError('Report event volumes differ from rounded raw saved flooding')
 
 
+def select_event_process(evidence, event, incident):
+    """Keep each saved series intact; narrow supplements cannot replace it.
+
+    Evidence is snapshot-first, then supplements. Prefer the frozen event
+    process, allowing a supplement only when it covers the same report needs.
+    Never combine different object scopes or interpolate their time windows.
+    """
+    eid, node = event['event_id'], event['node_id']
+    for row in evidence:
+        if row.get('event_id') != eid or row['metric_name'] != 'local_process_series':
+            continue
+        series = row.get('value', {}).get('series', [])
+        if not series:
+            continue
+        times = [item['time'] for item in series]
+        if (min(times) > event['start'] or max(times) < event['end']
+                or event['peak_time'] not in times):
+            continue
+        if all(node in item.get('nodes', {})
+               and set(incident).issubset(item.get('links', {})) for item in series):
+            return series
+    raise ValueError(f'Missing complete report event process: {eid}; '
+                     f'requires node {node}, incident links {sorted(incident)}, '
+                     'and coverage of the event window and peak')
+
+
 def prepare_materials(root, directory, state):
     package, diagnosis, evidence = verify_task(root, directory, state)
     summary = read(root/'summary.json')
@@ -262,18 +288,17 @@ def prepare_materials(root, directory, state):
     if len({e['event_id'] for e in events}) != len(events):
         raise ValueError('Duplicate report events')
     assessments = {a['event_id']: a for a in diagnosis.get('event_assessments', [])}
-    selected = {(r.get('event_id'), r['metric_name']): r for r in evidence if r['evidence_id'] in visible}
+    visible_evidence = [r for r in evidence if r['evidence_id'] in visible]
+    selected = {(r.get('event_id'), r['metric_name']): r for r in visible_evidence}
     mapping = pd.read_csv(static/'node_to_cell_mapping.csv', dtype={'node_id': str})
     numeric_notes = []; event_materials = []; all_ids = set(model['nodes']) | set(model['links'])
     for event in sorted(events, key=lambda e: (e['start'], e['node_id'], e['event_id'])):
         eid, node = event['event_id'], event['node_id']
-        process = selected.get((eid,'local_process_series'),{}).get('value',{}).get('series',[])
-        if not process:
-            raise ValueError(f'Missing report event process: {eid}')
         topology = selected[(eid,'local_structure')]['value']
         composition = selected[(eid,'direct_source_composition')]['value']
         assessment = assessments.get(eid)
         incident = {key: val for key, val in topology['links'].items() if node in (val['from_node'],val['to_node'])}
+        process = select_event_process(visible_evidence, event, incident)
         samples = []
         for item in process:
             target = item['nodes'][node]; outputs = {}; incoming = {}
