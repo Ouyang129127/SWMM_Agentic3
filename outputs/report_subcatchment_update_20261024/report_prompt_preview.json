@@ -1,0 +1,14 @@
+{
+  "preview_only": true,
+  "required_facts_by_event": {
+    "10:E001": [
+      "[[F0869]]"
+    ]
+  },
+  "connection_fact": "子汇水区2直接汇入节点10",
+  "fact_binding": {
+    "event_id": "10:E001",
+    "node_id": "10",
+    "metric": "direct_subcatchment_connection"
+  }
+}

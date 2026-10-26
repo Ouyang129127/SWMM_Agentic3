@@ -208,12 +208,20 @@ def build_event_evidence(root, event_catalog, binary_reader=read_saved_binary):
         if not model['available'] or not compatible:
             composition = {'status': 'unavailable', 'reason': 'Missing run input or unsupported units'}
         local_facilities = {k: v for k, v in scoped_links.items() if v['link_type'] != 'CONDUITS'}
+        # Only direct outlets to this event's target node; no catchment properties
+        # or upstream subcatchment routing are added to the initial evidence.
+        direct_subcatchments = [
+            {'subcatchment_id': fields[0], 'outlet_node_id': target}
+            for fields in model['sections'].get('SUBCATCHMENTS', [])
+            if len(fields) >= 3 and fields[2] == target
+        ]
         evidence_ids = []
         values = {
             'event_context': {'event': event, 'process_window': {'start': context_times[0], 'end': context_times[-1]},
                               'window_policy': 'one saved neighbor before/after; may require longer investigation'},
             'local_structure': {'available': model['available'], 'links': scoped_links, 'topology_scope': scope,
                                 'nodes': {n: model['nodes'].get(n) for n in sorted(local_nodes)},
+                                'direct_subcatchments': direct_subcatchments,
                                 'options': model['options'], 'units_verified_LPS': compatible},
             'local_process_series': {'series': series, 'native_status': native_status, 'missing_values': 'null, not zero',
                                      'scope_policy': SCOPE_POLICY,

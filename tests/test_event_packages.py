@@ -9,6 +9,9 @@ from workflow_agents.evidence.event_packages import build_event_evidence, parse_
 from evidence_fixtures import save_fixture
 from workflow_agents.evidence.sampled_events import identify_events
 from workflow_agents.orchestration.investigation import advance_investigation
+from workflow_agents.evidence.evidence_selection import select_initial_evidence
+from workflow_agents.diagnosis.service import build_diagnosis_prompt, serialize_prompt
+from workflow_agents.diagnosis.contract import check_claim_binding
 
 
 class FirstPassTests(unittest.IsolatedAsyncioTestCase):
@@ -63,6 +66,7 @@ class FirstPassTests(unittest.IsolatedAsyncioTestCase):
         structure = self.value(package, 'local_structure')
         self.assertEqual(structure['links']['L1']['offset_convention'], 'ELEVATION')
         self.assertEqual(structure['links']['L1']['length'], 100)
+        self.assertEqual(structure['direct_subcatchments'], [])
         composition = self.value(package, 'direct_source_composition')
         self.assertEqual(composition['status'], 'complete')
         self.assertAlmostEqual(composition['volume_denominator_m3'], 1.08)
@@ -71,6 +75,42 @@ class FirstPassTests(unittest.IsolatedAsyncioTestCase):
         self.assertAlmostEqual(sources['L2']['entering_volume_over_covered_intervals_m3'], .12)
         self.assertAlmostEqual(sum(s['event_volume_share'] for s in sources.values()), 1)
         self.assertAlmostEqual(composition['peak_denominator_Ls'], 13)
+
+    def test_direct_subcatchments_only_include_target_outlets_and_identifiers(self):
+        self.inp.write_text(self.inp.read_text(encoding='utf-8') +
+                            '\n[SUBCATCHMENTS]\n'
+                            'S_up RG N0 12 80 90 2 0\n'
+                            'S_local RG N1 5 40 60 1 0\n'
+                            'S_local2 RG N1 7 30 50 3 0\n'
+                            'S_via RG S_local 4 70 30 4 0\n'
+                            'S_down RG N2 8 20 40 5 0\n', encoding='utf-8')
+        package = self.build()
+        structure = self.value(package, 'local_structure')
+        self.assertEqual(structure['direct_subcatchments'], [
+            {'subcatchment_id': 'S_local', 'outlet_node_id': 'N1'},
+            {'subcatchment_id': 'S_local2', 'outlet_node_id': 'N1'},
+        ])
+        self.assertEqual(set(structure['nodes']), {'N0', 'N1', 'N2'})
+        self.assertEqual(set(structure['links']), {'L1', 'L2'})
+        self.assertEqual(len(package['evidence_rows']), 6)
+
+    def test_direct_subcatchment_connection_reaches_model_input_and_can_be_cited(self):
+        self.inp.write_text(self.inp.read_text(encoding='utf-8') +
+                            '\n[SUBCATCHMENTS]\nS_local RG N1 5 40 60 1 0\n', encoding='utf-8')
+        package = self.build()
+        rows = package['evidence_rows']
+        derived, visible_ids, selection = select_initial_evidence(
+            rows, {'scope': 'global', 'node_id': None, 'event_id': None}, 'm', 'r')
+        state = {'visible_ids': visible_ids, 'task_context': {'scope': 'global'},
+                 'evidence_selection': selection, 'evidence_overview': package['overview'],
+                 'observations': []}
+        prompt = json.loads(serialize_prompt(build_diagnosis_prompt(state, rows + derived)))
+        structure = next(r for r in prompt['visible_evidence'] if r['metric_name'] == 'local_structure')
+        self.assertEqual(structure['value']['direct_subcatchments'], [
+            {'subcatchment_id': 'S_local', 'outlet_node_id': 'N1'}])
+        check_claim_binding({'object_type': 'node', 'object_id': 'N1', 'event_id': 'N1:E001',
+                             'claim_text': '子汇水区S_local直接汇入节点N1。',
+                             'evidence_ids': [structure['evidence_id']]}, prompt['visible_evidence'])
 
     def test_initial_head_fallback_not_zero_lateral(self):
         series = self.value(self.build(), 'local_process_series')['series']

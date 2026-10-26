@@ -1,0 +1,34 @@
+{
+  "kind": "current_source_reconstruction_not_historical_request_capture",
+  "run_root": "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+  "task_root": "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\diagnosis_tasks\\6c808c679a2b4930b769cc22a6f80e54",
+  "audit_file": "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\diagnosis_tasks\\6c808c679a2b4930b769cc22a6f80e54\\diagnosis_attempt_67979c9703234a8fb21c14d50a5db68d.json",
+  "model": "deepseek-flash",
+  "started_at": "2026-10-21T15:13:09.979037+00:00",
+  "package_evidence_rows": 28552,
+  "snapshot_evidence_rows": 28567,
+  "visible_evidence_rows": 22,
+  "derived_global_scalar_summaries": 14,
+  "local_process_samples": 207,
+  "system_characters": 10205,
+  "user_message_characters": 204343,
+  "combined_characters": 214548,
+  "recorded_request_characters": 214548,
+  "character_count_matches_audit": true,
+  "recorded_usage": {
+    "prompt_tokens": 81570,
+    "completion_tokens": 27837
+  },
+  "previous_diagnosis": null,
+  "verification_feedback": null,
+  "source_hashes_before_and_after_match": true,
+  "source_hashes": {
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\evidence\\evidence_package.json": "41a20ba9961d2457ec140242ebfd5f65a61af986626fe0e941dad450a7a521ef",
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\diagnosis_tasks\\6c808c679a2b4930b769cc22a6f80e54\\evidence_snapshot.json": "0323c6a72d1dd732decbc5d4e74d9870ba31f01c5d4b37da42fc7f994875782e",
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\diagnosis_tasks\\6c808c679a2b4930b769cc22a6f80e54\\task.json": "e291b9e0ff71c1c987e776a94854e70f085a13155c53516098e7970876d54b14",
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\models\\Example1\\runs\\diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6\\diagnosis_tasks\\6c808c679a2b4930b769cc22a6f80e54\\diagnosis_attempt_67979c9703234a8fb21c14d50a5db68d.json": "e37a87069f4283091fa9667d9effe3df1ecacec3721d7e26094e40e5b60be644",
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\workflow_agents\\diagnosis\\prompts.py": "76b4ac57e8986e70f5641ce1e2971230b56807a2ad28e3e0eb3edc85e75a32d4",
+    "E:\\SWMM_Agentic\\SWMM-Agentic3\\workflow_agents\\diagnosis\\service.py": "42808a037baab4baab02efd03ae35894f0b14328a2e6f90aa0509f00e3c910bb"
+  },
+  "reconstruction_note": "Historical audit stores visible IDs, binding, character count and response, but not complete input messages or a system-prompt hash. Equal length supports consistency; it is not proof of byte-identical historical input."
+}

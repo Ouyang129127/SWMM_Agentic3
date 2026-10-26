@@ -345,6 +345,7 @@ def prepare_materials(root, directory, state):
         storage = selected.get((eid,'storage_volume_process'))
         event_materials.append({'event':event,'node_id':node,'event_id':eid,'process':samples,
             'source_composition':composition,'incident_links':incident,'surface_associations':associations,
+            'direct_subcatchments':topology.get('direct_subcatchments', []),
             'assessment':assessment,'storage_evidence':storage['value'] if storage else None,
             'allow_simple_peak_balance':abs(residual)<=.05})
     total_volume = math.fsum(e['estimated_volume_m3'] for e in events)

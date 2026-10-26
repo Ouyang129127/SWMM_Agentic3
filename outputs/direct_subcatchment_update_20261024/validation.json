@@ -1,0 +1,15 @@
+{
+  "preview_only": true,
+  "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+  "direct_subcatchments": [
+    {
+      "subcatchment_id": "2",
+      "outlet_node_id": "10"
+    }
+  ],
+  "unchanged_existing_event_records": 6,
+  "field_delivered_in_serialized_visible_evidence": true,
+  "existing_claim_binding_passed": true,
+  "original_sources_and_archives_unchanged": true,
+  "no_simulation_or_llm_call": true
+}

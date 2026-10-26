@@ -36,6 +36,7 @@ teaching_example和additional_teaching_examples仅示范文风与组织方式；
 事实标记必须作为独立分句，前后用逗号、分号或句号分隔，或在段落起止处；不得写“最大水深为[[标记]]”“[[标记]]的面积”这样的嵌入句式。
 示例：“从演变来看，[[F0012]]；[[F0013]]。积水范围扩大后逐步回落。” 不在事实标记前重复其中的起句。
 节点及管段用输入的原标识，模型与方案名称用提供的展示名，不自由编造区域、道路或方案名。
+事件材料的direct_subcatchment_connection是已确认的子汇水区编号与目标节点连接事实。存在该标记时，在该事件的发生过程或来源解释中使用一次完整事实标记，保留具体编号，不只概括为“本地汇流”。编号只说明直接连接，不据此分配逐区径流或新增能力、改造效果判断。
 六章：scene模拟基本场景，rain降雨特征，surface地表淹没与演变，overflow冒溢与地表联系，
 causes总体成因及节点之间的联系，conclusions主要结论与关注重点。
 intro直接概括本次最有意义的发现，不堆砌时间和指标，不写“下文按……展开”。
@@ -301,6 +302,17 @@ def make_prompt(materials):
     fixed_sections['rain']=[facts.add(paragraph,section='rain',metric='fixed_rain')
                             for paragraph in build_rain(materials)]
     surface_opening=facts.add(SURFACE_BASIS['opening'],section='surface',metric='depth_basis')
+    required_by_event={}
+    # Append connection facts last so archived fact tokens retain their meaning.
+    for source,item in zip(materials['events'],data['events']):
+        direct=source.get('direct_subcatchments', [])
+        if direct:
+            node=source['node_id']
+            names='、'.join('子汇水区'+entry['subcatchment_id'] for entry in direct)
+            token=facts.add(f'{names}直接汇入节点{node}',event_id=source['event_id'],
+                            node_id=node,metric='direct_subcatchment_connection')
+            item['direct_subcatchment_connection']=token
+            required_by_event[source['event_id']]=[token]
     return {'materials':data,'fact_text':facts.values,
             'fact_bindings':facts.bindings,'event_output_contract':_event_output_contract(materials),
             'teaching_example':copy.deepcopy(TEACHING_EXAMPLE),
@@ -311,6 +323,7 @@ def make_prompt(materials):
             'fixed_section_sources':{'scene':{'source':'program_template','version':SCENE_VERSION},
                                     'rain':{'source':'program_template','version':RAIN_VERSION}},
             'expected_event_ids':[e['event_id'] for e in materials['events']],
+            'required_facts_by_event':required_by_event,
             'required_facts_by_section':{k:v for k,v in required.items() if v},
             'rules':'All quantities and times in prose must reference fact_text via [[Fxxxx]].'},facts.values
 
@@ -357,6 +370,10 @@ def validate(response, materials, facts, known_ids):
             if not isinstance(event.get(field),list) or any(not isinstance(s,str) or not s.strip() for s in event[field]):
                 raise ValueError(f'Invalid event prose field: {field}')
         if not event['process']:raise ValueError('Every event needs process prose')
+        event_prose=''.join(event['process']+event['supported_causes']+event['candidate_influences'])
+        for token in current_prompt['required_facts_by_event'].get(event['event_id'], []):
+            if token not in event_prose:
+                raise ValueError('Missing direct-subcatchment connection fact in event '+event['event_id']+': '+token)
         process=''.join(event['process'])
         for other in materials['events']:
             if other['node_id']!=source['node_id'] and other['event']['start']==source['event']['start']:
@@ -481,6 +498,7 @@ def _repair_feedback(prompt, raw_response, error):
         'validation_error': str(error),
         'previous_response': copy.deepcopy(raw_response),
         'event_output_contract': copy.deepcopy(contracts),
+        'required_facts_by_event': copy.deepcopy(prompt.get('required_facts_by_event', {})),
         'mechanism_mismatches': [],
         'instruction': (
             '返回修正后的完整JSON，不只返回差异。以当前event_output_contract为准复制机制列表，'

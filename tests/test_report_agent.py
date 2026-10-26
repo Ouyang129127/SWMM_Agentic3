@@ -146,6 +146,41 @@ class ReportTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(checks['events'],3);self.assertNotIn('[[F',p.read_text(encoding='utf-8'))
         self.assertIn('10.0毫米',p.read_text(encoding='utf-8'))
 
+    def test_direct_subcatchment_identifiers_reach_facts_and_rendered_report(self):
+        materials=example(nodes=('Junction_A',))
+        materials['events'][0]['direct_subcatchments']=[
+            {'subcatchment_id':'2','outlet_node_id':'Junction_A'},
+            {'subcatchment_id':'SC_7','outlet_node_id':'Junction_A'}]
+        prompt,facts=make_prompt(materials)
+        token=prompt['materials']['events'][0]['direct_subcatchment_connection']
+        self.assertEqual(expand(token,facts),'子汇水区2、子汇水区SC_7直接汇入节点Junction_A')
+        response=answer(prompt)
+        response['events'][0]['process'].append(token+'。')
+        validate(response,materials,facts,['Junction_A'])
+        path=self.root/'subcatchments.html'
+        render(materials,response,facts,self.images(),path,'now')
+        check_html(path,materials)
+        self.assertIn('子汇水区2、子汇水区SC_7直接汇入节点Junction_A',path.read_text(encoding='utf-8'))
+
+    def test_missing_direct_subcatchment_fact_is_reported_for_repair(self):
+        materials=example(nodes=('Junction_A',))
+        materials['events'][0]['direct_subcatchments']=[
+            {'subcatchment_id':'2','outlet_node_id':'Junction_A'}]
+        prompt,facts=make_prompt(materials)
+        response=answer(prompt)
+        with self.assertRaisesRegex(ValueError,'Missing direct-subcatchment connection'):
+            validate(response,materials,facts,['Junction_A'])
+
+    def test_absent_or_empty_direct_subcatchments_preserve_existing_facts(self):
+        baseline=example(nodes=('Junction_A',))
+        old_prompt,old_facts=make_prompt(baseline)
+        baseline['events'][0]['direct_subcatchments']=[]
+        prompt,facts=make_prompt(baseline)
+        self.assertEqual(facts,old_facts)
+        self.assertEqual(prompt['required_facts_by_event'],{})
+        self.assertNotIn('direct_subcatchment_connection',prompt['materials']['events'][0])
+        validate(answer(prompt),baseline,facts,['Junction_A'])
+
     def images(self):
         p=self.root/'image.png';Image.new('RGB',(12,12),'white').save(p)
         return {k:{'path':str(p),'caption':'实际图像'} for k in ('rainfall','surface_maps','surface_process','surface_stages')}

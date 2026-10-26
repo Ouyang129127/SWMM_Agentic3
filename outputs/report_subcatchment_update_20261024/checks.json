@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "sections": 6,
+  "events": 1,
+  "embedded_images": 7,
+  "all_images_verified": true,
+  "numeric_policy": "supplied_fact_tokens",
+  "causal_policy": "current_diagnosis_statuses",
+  "verification_scope": "structure, source identity and references; not causal certification",
+  "test_mode": "offline replay; no simulation or LLM call",
+  "direct_subcatchments": [
+    {
+      "subcatchment_id": "2",
+      "outlet_node_id": "10"
+    }
+  ],
+  "connection_fact": "子汇水区2直接汇入节点10",
+  "existing_fact_tokens_preserved": 868,
+  "omitted_connection_detected": true,
+  "original_run_and_archives_unchanged": true
+}

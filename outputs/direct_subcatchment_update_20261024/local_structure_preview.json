@@ -1,0 +1,251 @@
+{
+  "preview_only": true,
+  "note": "Read-only regeneration preview, not a replacement of the archived package or diagnosis task.",
+  "evidence_row": {
+    "evidence_id": "FP_4a998619e4a5e0e06202",
+    "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+    "source_model": "Example1",
+    "object_type": "node",
+    "object_id": "10",
+    "event_id": "10:E001",
+    "metric_name": "local_structure",
+    "value": {
+      "available": true,
+      "links": {
+        "1": {
+          "link_type": "CONDUITS",
+          "from_node": "9",
+          "to_node": "10",
+          "input_fields": [
+            "121.92",
+            "0.01",
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "cross_section_fields": [
+            "CIRCULAR",
+            "0.4572",
+            "0",
+            "0",
+            "0",
+            "1"
+          ],
+          "offset_convention": "DEPTH",
+          "length": 121.92,
+          "roughness": 0.01,
+          "inlet_offset": 0.0,
+          "outlet_offset": 0.0,
+          "cross_section": {
+            "shape": "CIRCULAR",
+            "geometry_fields": [
+              "0.4572",
+              "0",
+              "0",
+              "0",
+              "1"
+            ]
+          }
+        },
+        "6": {
+          "link_type": "CONDUITS",
+          "from_node": "10",
+          "to_node": "21",
+          "input_fields": [
+            "121.92",
+            "0.01",
+            "0",
+            "0.3048",
+            "0",
+            "0"
+          ],
+          "cross_section_fields": [
+            "CIRCULAR",
+            "0.3048",
+            "0",
+            "0",
+            "0",
+            "1"
+          ],
+          "offset_convention": "DEPTH",
+          "length": 121.92,
+          "roughness": 0.01,
+          "inlet_offset": 0.0,
+          "outlet_offset": 0.3048,
+          "cross_section": {
+            "shape": "CIRCULAR",
+            "geometry_fields": [
+              "0.3048",
+              "0",
+              "0",
+              "0",
+              "1"
+            ]
+          }
+        }
+      },
+      "topology_scope": {
+        "policy": "upstream_one_segment_downstream_confluence_v1",
+        "target_node": "10",
+        "status": "complete_for_policy",
+        "direction_basis": "input from_node/to_node; not inferred actual flow or causal direction",
+        "direct_links": [
+          "1",
+          "6"
+        ],
+        "traces": [
+          {
+            "origin_node": "10",
+            "direction": "upstream",
+            "role": "main",
+            "nodes": [
+              "10",
+              "9"
+            ],
+            "links": [
+              "1"
+            ],
+            "stop_node": "9",
+            "stop_reason": "terminal"
+          },
+          {
+            "origin_node": "10",
+            "direction": "downstream",
+            "role": "main",
+            "nodes": [
+              "10",
+              "21"
+            ],
+            "links": [
+              "6"
+            ],
+            "stop_node": "21",
+            "stop_reason": "confluence"
+          }
+        ],
+        "boundary_nodes": {
+          "21": [
+            "confluence"
+          ],
+          "9": [
+            "terminal"
+          ]
+        },
+        "boundary_links": {},
+        "unresolved_branches": [],
+        "node_roles": {
+          "10": "target",
+          "21": "boundary",
+          "9": "boundary"
+        },
+        "link_roles": {
+          "1": "corridor",
+          "6": "corridor"
+        },
+        "missing_node_definitions": [],
+        "limitations": [
+          "Upstream scope retains only each target incoming link and its endpoint.",
+          "Downstream scope retains the first confluence, facility, special node or terminal boundary.",
+          "No side branches or extra links at corridor/boundary nodes are automatically included.",
+          "A pure downstream split stops with partial coverage; selecting further paths requires supplementation.",
+          "Target direct exchanges remain visible when the target itself splits; no branch is followed beyond them.",
+          "Intermediate lateral inflows are node processes, not additional direct target sources.",
+          "Topology completeness does not establish causal completeness; reversals may need investigation."
+        ]
+      },
+      "nodes": {
+        "10": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 303.276,
+          "input_fields": [
+            "303.276",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        },
+        "21": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 301.752,
+          "input_fields": [
+            "301.752",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        },
+        "9": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 304.8,
+          "input_fields": [
+            "304.8",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        }
+      },
+      "direct_subcatchments": [
+        {
+          "subcatchment_id": "2",
+          "outlet_node_id": "10"
+        }
+      ],
+      "options": {
+        "FLOW_UNITS": "LPS",
+        "INFILTRATION": "HORTON",
+        "FLOW_ROUTING": "DYNWAVE",
+        "LINK_OFFSETS": "DEPTH",
+        "MIN_SLOPE": "0",
+        "ALLOW_PONDING": "NO",
+        "SKIP_STEADY_STATE": "NO",
+        "START_DATE": "01/01/2024",
+        "START_TIME": "00:00:00",
+        "REPORT_START_DATE": "01/01/2024",
+        "REPORT_START_TIME": "00:00:00",
+        "END_DATE": "01/01/2024",
+        "END_TIME": "07:00:00",
+        "SWEEP_START": "01/01",
+        "SWEEP_END": "12/31",
+        "DRY_DAYS": "5",
+        "REPORT_STEP": "00:00:05",
+        "WET_STEP": "00:01:00",
+        "DRY_STEP": "01:00:00",
+        "ROUTING_STEP": "0:00:05",
+        "RULE_STEP": "00:00:00",
+        "INERTIAL_DAMPING": "PARTIAL",
+        "NORMAL_FLOW_LIMITED": "BOTH",
+        "FORCE_MAIN_EQUATION": "H-W",
+        "VARIABLE_STEP": "0.75",
+        "LENGTHENING_STEP": "0",
+        "MIN_SURFAREA": "1.167",
+        "MAX_TRIALS": "8",
+        "HEAD_TOLERANCE": "0.0015",
+        "SYS_FLOW_TOL": "5",
+        "LAT_FLOW_TOL": "5",
+        "MINIMUM_STEP": "0.5",
+        "THREADS": "1",
+        "IGNORE_RAINFALL": "NO"
+      },
+      "units_verified_LPS": true
+    },
+    "unit": "structured",
+    "source_file": "evidence/evidence_package.json"
+  }
+}

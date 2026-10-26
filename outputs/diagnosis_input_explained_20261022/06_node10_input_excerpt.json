@@ -1,0 +1,402 @@
+{
+  "notice": "Reading excerpt only: R1 received all 207 local-process samples, not this one sample.",
+  "event_context": {
+    "evidence_id": "FP_76e2d6227ceba6965ad4",
+    "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+    "source_model": "Example1",
+    "object_type": "node",
+    "object_id": "10",
+    "event_id": "10:E001",
+    "metric_name": "event_context",
+    "value": {
+      "event": {
+        "event_id": "10:E001",
+        "node_id": "10",
+        "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+        "model_name": "Example1",
+        "occurrence": 1,
+        "start": "2024-01-01 01:36:40",
+        "end": "2024-01-01 01:53:40",
+        "last_positive_time": "2024-01-01 01:53:35",
+        "peak_time": "2024-01-01 01:40:10",
+        "peak_flooding_Ls": 151.048,
+        "duration_minutes": 17.0,
+        "estimated_volume_m3": 82.855,
+        "positive_sample_count": 204,
+        "left_censored": false,
+        "right_censored": false,
+        "saved_step_seconds": 5.0,
+        "integration_method": "left_sample_rectangle"
+      },
+      "process_window": {
+        "start": "2024-01-01 01:36:35",
+        "end": "2024-01-01 01:53:45"
+      },
+      "window_policy": "one saved neighbor before/after; may require longer investigation"
+    },
+    "unit": "structured",
+    "source_file": "evidence/evidence_package.json"
+  },
+  "local_structure": {
+    "evidence_id": "FP_4a998619e4a5e0e06202",
+    "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+    "source_model": "Example1",
+    "object_type": "node",
+    "object_id": "10",
+    "event_id": "10:E001",
+    "metric_name": "local_structure",
+    "value": {
+      "available": true,
+      "links": {
+        "1": {
+          "link_type": "CONDUITS",
+          "from_node": "9",
+          "to_node": "10",
+          "input_fields": [
+            "121.92",
+            "0.01",
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "cross_section_fields": [
+            "CIRCULAR",
+            "0.4572",
+            "0",
+            "0",
+            "0",
+            "1"
+          ],
+          "offset_convention": "DEPTH",
+          "length": 121.92,
+          "roughness": 0.01,
+          "inlet_offset": 0.0,
+          "outlet_offset": 0.0,
+          "cross_section": {
+            "shape": "CIRCULAR",
+            "geometry_fields": [
+              "0.4572",
+              "0",
+              "0",
+              "0",
+              "1"
+            ]
+          }
+        },
+        "6": {
+          "link_type": "CONDUITS",
+          "from_node": "10",
+          "to_node": "21",
+          "input_fields": [
+            "121.92",
+            "0.01",
+            "0",
+            "0.3048",
+            "0",
+            "0"
+          ],
+          "cross_section_fields": [
+            "CIRCULAR",
+            "0.3048",
+            "0",
+            "0",
+            "0",
+            "1"
+          ],
+          "offset_convention": "DEPTH",
+          "length": 121.92,
+          "roughness": 0.01,
+          "inlet_offset": 0.0,
+          "outlet_offset": 0.3048,
+          "cross_section": {
+            "shape": "CIRCULAR",
+            "geometry_fields": [
+              "0.3048",
+              "0",
+              "0",
+              "0",
+              "1"
+            ]
+          }
+        }
+      },
+      "topology_scope": {
+        "policy": "upstream_one_segment_downstream_confluence_v1",
+        "target_node": "10",
+        "status": "complete_for_policy",
+        "direction_basis": "input from_node/to_node; not inferred actual flow or causal direction",
+        "direct_links": [
+          "1",
+          "6"
+        ],
+        "traces": [
+          {
+            "origin_node": "10",
+            "direction": "upstream",
+            "role": "main",
+            "nodes": [
+              "10",
+              "9"
+            ],
+            "links": [
+              "1"
+            ],
+            "stop_node": "9",
+            "stop_reason": "terminal"
+          },
+          {
+            "origin_node": "10",
+            "direction": "downstream",
+            "role": "main",
+            "nodes": [
+              "10",
+              "21"
+            ],
+            "links": [
+              "6"
+            ],
+            "stop_node": "21",
+            "stop_reason": "confluence"
+          }
+        ],
+        "boundary_nodes": {
+          "21": [
+            "confluence"
+          ],
+          "9": [
+            "terminal"
+          ]
+        },
+        "boundary_links": {},
+        "unresolved_branches": [],
+        "node_roles": {
+          "10": "target",
+          "21": "boundary",
+          "9": "boundary"
+        },
+        "link_roles": {
+          "1": "corridor",
+          "6": "corridor"
+        },
+        "missing_node_definitions": [],
+        "limitations": [
+          "Upstream scope retains only each target incoming link and its endpoint.",
+          "Downstream scope retains the first confluence, facility, special node or terminal boundary.",
+          "No side branches or extra links at corridor/boundary nodes are automatically included.",
+          "A pure downstream split stops with partial coverage; selecting further paths requires supplementation.",
+          "Target direct exchanges remain visible when the target itself splits; no branch is followed beyond them.",
+          "Intermediate lateral inflows are node processes, not additional direct target sources.",
+          "Topology completeness does not establish causal completeness; reversals may need investigation."
+        ]
+      },
+      "nodes": {
+        "10": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 303.276,
+          "input_fields": [
+            "303.276",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        },
+        "21": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 301.752,
+          "input_fields": [
+            "301.752",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        },
+        "9": {
+          "node_type": "JUNCTIONS",
+          "invert_elevation": 304.8,
+          "input_fields": [
+            "304.8",
+            "0.9144",
+            "0",
+            "0",
+            "0"
+          ],
+          "max_depth": 0.9144,
+          "initial_depth": 0.0,
+          "surcharge_depth": 0.0,
+          "ponded_area": 0.0
+        }
+      },
+      "options": {
+        "FLOW_UNITS": "LPS",
+        "INFILTRATION": "HORTON",
+        "FLOW_ROUTING": "DYNWAVE",
+        "LINK_OFFSETS": "DEPTH",
+        "MIN_SLOPE": "0",
+        "ALLOW_PONDING": "NO",
+        "SKIP_STEADY_STATE": "NO",
+        "START_DATE": "01/01/2024",
+        "START_TIME": "00:00:00",
+        "REPORT_START_DATE": "01/01/2024",
+        "REPORT_START_TIME": "00:00:00",
+        "END_DATE": "01/01/2024",
+        "END_TIME": "07:00:00",
+        "SWEEP_START": "01/01",
+        "SWEEP_END": "12/31",
+        "DRY_DAYS": "5",
+        "REPORT_STEP": "00:00:05",
+        "WET_STEP": "00:01:00",
+        "DRY_STEP": "01:00:00",
+        "ROUTING_STEP": "0:00:05",
+        "RULE_STEP": "00:00:00",
+        "INERTIAL_DAMPING": "PARTIAL",
+        "NORMAL_FLOW_LIMITED": "BOTH",
+        "FORCE_MAIN_EQUATION": "H-W",
+        "VARIABLE_STEP": "0.75",
+        "LENGTHENING_STEP": "0",
+        "MIN_SURFAREA": "1.167",
+        "MAX_TRIALS": "8",
+        "HEAD_TOLERANCE": "0.0015",
+        "SYS_FLOW_TOL": "5",
+        "LAT_FLOW_TOL": "5",
+        "MINIMUM_STEP": "0.5",
+        "THREADS": "1",
+        "IGNORE_RAINFALL": "NO"
+      },
+      "units_verified_LPS": true
+    },
+    "unit": "structured",
+    "source_file": "evidence/evidence_package.json"
+  },
+  "process_evidence_id": "FP_bd39996c19e0d97f7119",
+  "one_peak_sample": {
+    "time": "2024-01-01 01:40:10",
+    "nodes": {
+      "10": {
+        "head_m": 304.19,
+        "total_inflow_Ls": 315.142,
+        "lateral_inflow_Ls": 158.045,
+        "depth_m": 0.914,
+        "flooding_Ls": 151.048,
+        "head_method": "native_output"
+      },
+      "21": {
+        "head_m": 302.25,
+        "total_inflow_Ls": 181.037,
+        "lateral_inflow_Ls": 0.0,
+        "depth_m": 0.498,
+        "flooding_Ls": 0.0,
+        "head_method": "native_output"
+      },
+      "9": {
+        "head_m": 304.991,
+        "total_inflow_Ls": 158.46,
+        "lateral_inflow_Ls": 158.46,
+        "depth_m": 0.191,
+        "flooding_Ls": 0.0,
+        "head_method": "native_output"
+      }
+    },
+    "links": {
+      "1": {
+        "signed_model_flow_Ls": 157.097,
+        "depth_m": 0.324,
+        "from_minus_to_head_m": 0.8
+      },
+      "6": {
+        "signed_model_flow_Ls": 164.048,
+        "depth_m": 0.297,
+        "from_minus_to_head_m": 1.941
+      }
+    },
+    "signed_towards_node_Ls": {
+      "1": 157.097,
+      "6": -164.048,
+      "aggregate_lateral": 158.045
+    },
+    "positive_source_sum_Ls": 315.142,
+    "source_sum_minus_total_Ls": 3.9550781139041646e-07
+  },
+  "direct_source_composition": {
+    "evidence_id": "FP_b8d98cadddd0a1ea92ab",
+    "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+    "source_model": "Example1",
+    "object_type": "node",
+    "object_id": "10",
+    "event_id": "10:E001",
+    "metric_name": "direct_source_composition",
+    "value": {
+      "status": "complete",
+      "method": "left_sample_rectangle",
+      "event_window": {
+        "start": "2024-01-01 01:36:40",
+        "end": "2024-01-01 01:53:40"
+      },
+      "volume_denominator_m3": 250.283,
+      "peak_time": "2024-01-01 01:40:10",
+      "peak_denominator_Ls": 315.142,
+      "share_meaning": "direct entering composition, not flood contribution",
+      "total_inflow_role": "comparison only; never added as a source",
+      "sources": [
+        {
+          "source_id": "1",
+          "entering_volume_over_covered_intervals_m3": 125.716,
+          "outgoing_volume_over_covered_intervals_m3": 0.0,
+          "covered_seconds": 1020.0,
+          "event_volume_share": 0.502,
+          "peak_entering_Ls": 157.097,
+          "peak_flow_share": 0.498
+        },
+        {
+          "source_id": "6",
+          "entering_volume_over_covered_intervals_m3": 0.0,
+          "outgoing_volume_over_covered_intervals_m3": 167.144,
+          "covered_seconds": 1020.0,
+          "event_volume_share": 0.0,
+          "peak_entering_Ls": 0,
+          "peak_flow_share": 0.0
+        },
+        {
+          "source_id": "aggregate_lateral",
+          "entering_volume_over_covered_intervals_m3": 124.567,
+          "outgoing_volume_over_covered_intervals_m3": 0.0,
+          "covered_seconds": 1020.0,
+          "event_volume_share": 0.498,
+          "peak_entering_Ls": 158.045,
+          "peak_flow_share": 0.502
+        }
+      ]
+    },
+    "unit": "structured",
+    "source_file": "evidence/evidence_package.json"
+  },
+  "facilities_and_storage": {
+    "evidence_id": "FP_3176c89973b34f2bfbef",
+    "run_id": "diagnostic_single_4h_20mm_5min__baseline__20261021_230830_fcffdca6",
+    "source_model": "Example1",
+    "object_type": "node",
+    "object_id": "10",
+    "event_id": "10:E001",
+    "metric_name": "facilities_and_storage",
+    "value": {
+      "local_facilities": {},
+      "facility_presence_status": "checked_from_run_input",
+      "controls_present": false,
+      "facility_actions": "not_extracted",
+      "storage_volume_process": "not_extracted",
+      "initial_state_source": "input_fields in local_structure, not inferred from first report sample"
+    },
+    "unit": "structured",
+    "source_file": "evidence/evidence_package.json"
+  }
+}
